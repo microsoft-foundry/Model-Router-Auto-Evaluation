@@ -1,0 +1,12 @@
+# Core dependencies for Microsoft Foundry Model Router Evaluation
+openai>=1.0
+pyyaml>=6.0
+pandas>=2.0
+matplotlib>=3.7
+tqdm>=4.65
+python-dotenv>=1.0
+ipykernel>=6.0
+
+# Microsoft Foundry cloud evaluation (optional — needed for scripts/run_foundry_eval.py)
+azure-ai-projects>=2.1.0,<3.0
+azure-identity>=1.15

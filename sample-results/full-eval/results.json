@@ -1,0 +1,314 @@
+{
+  "evaluation_name": "model-router-vs-gpt5",
+  "dataset": "datasets/sample_custom.jsonl",
+  "model_router": {
+    "endpoint": "model_router",
+    "total_requests": 10,
+    "successful_requests": 10,
+    "error_count": 0,
+    "timeout_count": 0,
+    "latency": {
+      "count": 10,
+      "mean_ms": 11066.66,
+      "median_ms": 10317.71,
+      "p90_ms": 19310.0,
+      "p95_ms": 20765.22,
+      "p99_ms": 21929.4,
+      "min_ms": 993.69,
+      "max_ms": 22220.44
+    },
+    "cost": {
+      "total_prompt_tokens": 287,
+      "total_completion_tokens": 3448,
+      "total_tokens": 3735,
+      "estimated_cost_usd": 0.003704,
+      "cost_per_prompt_avg_usd": 0.00037,
+      "cost_per_prompt_p50_usd": 0.000137,
+      "cost_per_prompt_p95_usd": 0.001256
+    },
+    "latency_by_category": {
+      "math": {
+        "count": 1,
+        "mean_ms": 2836.58,
+        "median_ms": 2836.58,
+        "p90_ms": 2836.58,
+        "p95_ms": 2836.58,
+        "p99_ms": 2836.58,
+        "min_ms": 2836.58,
+        "max_ms": 2836.58
+      },
+      "reasoning": {
+        "count": 1,
+        "mean_ms": 993.69,
+        "median_ms": 993.69,
+        "p90_ms": 993.69,
+        "p95_ms": 993.69,
+        "p99_ms": 993.69,
+        "min_ms": 993.69,
+        "max_ms": 993.69
+      },
+      "summarization": {
+        "count": 1,
+        "mean_ms": 11755.55,
+        "median_ms": 11755.55,
+        "p90_ms": 11755.55,
+        "p95_ms": 11755.55,
+        "p99_ms": 11755.55,
+        "min_ms": 11755.55,
+        "max_ms": 11755.55
+      },
+      "creative_writing": {
+        "count": 1,
+        "mean_ms": 18711.3,
+        "median_ms": 18711.3,
+        "p90_ms": 18711.3,
+        "p95_ms": 18711.3,
+        "p99_ms": 18711.3,
+        "min_ms": 18711.3,
+        "max_ms": 18711.3
+      },
+      "code_generation": {
+        "count": 2,
+        "mean_ms": 10776.23,
+        "median_ms": 10776.23,
+        "p90_ms": 12977.03,
+        "p95_ms": 13252.13,
+        "p99_ms": 13472.21,
+        "min_ms": 8025.23,
+        "max_ms": 13527.23
+      },
+      "general_knowledge": {
+        "count": 2,
+        "mean_ms": 15550.15,
+        "median_ms": 15550.15,
+        "p90_ms": 20886.38,
+        "p95_ms": 21553.41,
+        "p99_ms": 22087.03,
+        "min_ms": 8879.87,
+        "max_ms": 22220.44
+      },
+      "technical_knowledge": {
+        "count": 1,
+        "mean_ms": 18986.62,
+        "median_ms": 18986.62,
+        "p90_ms": 18986.62,
+        "p95_ms": 18986.62,
+        "p99_ms": 18986.62,
+        "min_ms": 18986.62,
+        "max_ms": 18986.62
+      },
+      "instruction_following": {
+        "count": 1,
+        "mean_ms": 4730.08,
+        "median_ms": 4730.08,
+        "p90_ms": 4730.08,
+        "p95_ms": 4730.08,
+        "p99_ms": 4730.08,
+        "min_ms": 4730.08,
+        "max_ms": 4730.08
+      }
+    },
+    "model_distribution": {
+      "gpt-oss-120b": 2,
+      "grok-4-fast-reasoning": 6,
+      "gpt-5-mini-2025-08-07": 2
+    }
+  },
+  "baseline": {
+    "endpoint": "baseline:gpt-5",
+    "total_requests": 10,
+    "successful_requests": 10,
+    "error_count": 0,
+    "timeout_count": 0,
+    "latency": {
+      "count": 10,
+      "mean_ms": 10751.08,
+      "median_ms": 13042.29,
+      "p90_ms": 15560.77,
+      "p95_ms": 15659.6,
+      "p99_ms": 15738.66,
+      "min_ms": 2261.51,
+      "max_ms": 15758.43
+    },
+    "cost": {
+      "total_prompt_tokens": 204,
+      "total_completion_tokens": 6622,
+      "total_tokens": 6826,
+      "estimated_cost_usd": 0.066475,
+      "cost_per_prompt_avg_usd": 0.006647,
+      "cost_per_prompt_p50_usd": 0.0085,
+      "cost_per_prompt_p95_usd": 0.010264
+    },
+    "latency_by_category": {
+      "math": {
+        "count": 1,
+        "mean_ms": 3096.3,
+        "median_ms": 3096.3,
+        "p90_ms": 3096.3,
+        "p95_ms": 3096.3,
+        "p99_ms": 3096.3,
+        "min_ms": 3096.3,
+        "max_ms": 3096.3
+      },
+      "reasoning": {
+        "count": 1,
+        "mean_ms": 2261.51,
+        "median_ms": 2261.51,
+        "p90_ms": 2261.51,
+        "p95_ms": 2261.51,
+        "p99_ms": 2261.51,
+        "min_ms": 2261.51,
+        "max_ms": 2261.51
+      },
+      "summarization": {
+        "count": 1,
+        "mean_ms": 6891.83,
+        "median_ms": 6891.83,
+        "p90_ms": 6891.83,
+        "p95_ms": 6891.83,
+        "p99_ms": 6891.83,
+        "min_ms": 6891.83,
+        "max_ms": 6891.83
+      },
+      "creative_writing": {
+        "count": 1,
+        "mean_ms": 13079.58,
+        "median_ms": 13079.58,
+        "p90_ms": 13079.58,
+        "p95_ms": 13079.58,
+        "p99_ms": 13079.58,
+        "min_ms": 13079.58,
+        "max_ms": 13079.58
+      },
+      "code_generation": {
+        "count": 2,
+        "mean_ms": 15307.1,
+        "median_ms": 15307.1,
+        "p90_ms": 15361.44,
+        "p95_ms": 15368.23,
+        "p99_ms": 15373.66,
+        "min_ms": 15239.19,
+        "max_ms": 15375.02
+      },
+      "general_knowledge": {
+        "count": 2,
+        "mean_ms": 14271.9,
+        "median_ms": 14271.9,
+        "p90_ms": 15285.43,
+        "p95_ms": 15412.12,
+        "p99_ms": 15513.47,
+        "min_ms": 13005.0,
+        "max_ms": 15538.81
+      },
+      "technical_knowledge": {
+        "count": 1,
+        "mean_ms": 15758.43,
+        "median_ms": 15758.43,
+        "p90_ms": 15758.43,
+        "p95_ms": 15758.43,
+        "p99_ms": 15758.43,
+        "min_ms": 15758.43,
+        "max_ms": 15758.43
+      },
+      "instruction_following": {
+        "count": 1,
+        "mean_ms": 7265.1,
+        "median_ms": 7265.1,
+        "p90_ms": 7265.1,
+        "p95_ms": 7265.1,
+        "p99_ms": 7265.1,
+        "min_ms": 7265.1,
+        "max_ms": 7265.1
+      }
+    },
+    "model_distribution": {
+      "gpt-5-2025-08-07": 10
+    }
+  },
+  "comparison": {
+    "cost_savings_ratio": 0.9443,
+    "latency_diff_mean_ms": 315.58,
+    "latency_diff_p50_ms": -2724.58
+  },
+  "quality": {
+    "pairwise": {
+      "router_wins": 4,
+      "baseline_wins": 0,
+      "ties": 6,
+      "total_judged": 10,
+      "router_win_rate": 0.4,
+      "baseline_win_rate": 0.0,
+      "tie_rate": 0.6
+    },
+    "absolute_scores": {
+      "router_overall": 4.875,
+      "baseline_overall": 3.4,
+      "router_by_dimension": {
+        "accuracy": 4.7,
+        "completeness": 4.9,
+        "clarity": 5.0,
+        "helpfulness": 4.9
+      },
+      "baseline_by_dimension": {
+        "accuracy": 3.4,
+        "completeness": 3.4,
+        "clarity": 3.4,
+        "helpfulness": 3.4
+      }
+    },
+    "win_rate_by_category": {
+      "technical_knowledge": {
+        "router_win_rate": 1.0,
+        "baseline_win_rate": 0.0,
+        "tie_rate": 0.0,
+        "count": 1
+      },
+      "code_generation": {
+        "router_win_rate": 0.0,
+        "baseline_win_rate": 0.0,
+        "tie_rate": 1.0,
+        "count": 2
+      },
+      "general_knowledge": {
+        "router_win_rate": 1.0,
+        "baseline_win_rate": 0.0,
+        "tie_rate": 0.0,
+        "count": 2
+      },
+      "math": {
+        "router_win_rate": 0.0,
+        "baseline_win_rate": 0.0,
+        "tie_rate": 1.0,
+        "count": 1
+      },
+      "creative_writing": {
+        "router_win_rate": 1.0,
+        "baseline_win_rate": 0.0,
+        "tie_rate": 0.0,
+        "count": 1
+      },
+      "summarization": {
+        "router_win_rate": 0.0,
+        "baseline_win_rate": 0.0,
+        "tie_rate": 1.0,
+        "count": 1
+      },
+      "reasoning": {
+        "router_win_rate": 0.0,
+        "baseline_win_rate": 0.0,
+        "tie_rate": 1.0,
+        "count": 1
+      },
+      "instruction_following": {
+        "router_win_rate": 0.0,
+        "baseline_win_rate": 0.0,
+        "tie_rate": 1.0,
+        "count": 1
+      }
+    },
+    "router_win_rate_ci_95": [
+      0.1,
+      0.7
+    ]
+  }
+}

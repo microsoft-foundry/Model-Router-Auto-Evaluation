@@ -1,0 +1,5 @@
+# Dev / test dependencies (in addition to requirements.txt)
+-r requirements.txt
+pytest>=7.0
+pytest-asyncio>=0.21
+ruff>=0.1

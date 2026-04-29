@@ -1,0 +1,312 @@
+{
+  "evaluation_name": "sample-demo-report",
+  "dataset": "datasets/mock_100_prompts.jsonl",
+  "model_router": {
+    "endpoint": "model_router",
+    "total_requests": 100,
+    "successful_requests": 98,
+    "error_count": 2,
+    "timeout_count": 0,
+    "latency": {
+      "count": 98,
+      "mean_ms": 306.77,
+      "median_ms": 298.81,
+      "p90_ms": 432.79,
+      "p95_ms": 466.05,
+      "p99_ms": 492.45,
+      "min_ms": 110.59,
+      "max_ms": 506.52
+    },
+    "cost": {
+      "total_prompt_tokens": 8401,
+      "total_completion_tokens": 20541,
+      "total_tokens": 28942,
+      "estimated_cost_usd": 0.230613,
+      "cost_per_prompt_avg_usd": 0.002353,
+      "cost_per_prompt_p50_usd": 0.002381,
+      "cost_per_prompt_p95_usd": 0.003706
+    },
+    "latency_by_category": {
+      "code_generation": {
+        "count": 13,
+        "mean_ms": 338.04,
+        "median_ms": 334.41,
+        "p90_ms": 450.86,
+        "p95_ms": 470.18,
+        "p99_ms": 477.17,
+        "min_ms": 110.59,
+        "max_ms": 478.92
+      },
+      "technical_knowledge": {
+        "count": 13,
+        "mean_ms": 281.36,
+        "median_ms": 270.89,
+        "p90_ms": 370.94,
+        "p95_ms": 393.38,
+        "p99_ms": 413.52,
+        "min_ms": 195.32,
+        "max_ms": 418.55
+      },
+      "creative_writing": {
+        "count": 13,
+        "mean_ms": 379.3,
+        "median_ms": 360.21,
+        "p90_ms": 485.18,
+        "p95_ms": 497.81,
+        "p99_ms": 504.78,
+        "min_ms": 298.07,
+        "max_ms": 506.52
+      },
+      "math": {
+        "count": 12,
+        "mean_ms": 275.86,
+        "median_ms": 281.46,
+        "p90_ms": 321.47,
+        "p95_ms": 328.92,
+        "p99_ms": 335.78,
+        "min_ms": 177.47,
+        "max_ms": 337.49
+      },
+      "reasoning": {
+        "count": 11,
+        "mean_ms": 373.58,
+        "median_ms": 409.6,
+        "p90_ms": 458.17,
+        "p95_ms": 466.94,
+        "p99_ms": 473.95,
+        "min_ms": 225.81,
+        "max_ms": 475.7
+      },
+      "summarization": {
+        "count": 12,
+        "mean_ms": 210.86,
+        "median_ms": 202.51,
+        "p90_ms": 248.79,
+        "p95_ms": 266.93,
+        "p99_ms": 283.0,
+        "min_ms": 155.37,
+        "max_ms": 287.01
+      },
+      "general_knowledge": {
+        "count": 12,
+        "mean_ms": 258.26,
+        "median_ms": 250.57,
+        "p90_ms": 331.34,
+        "p95_ms": 344.58,
+        "p99_ms": 352.53,
+        "min_ms": 167.4,
+        "max_ms": 354.52
+      },
+      "instruction_following": {
+        "count": 12,
+        "mean_ms": 335.94,
+        "median_ms": 354.13,
+        "p90_ms": 440.55,
+        "p95_ms": 459.24,
+        "p99_ms": 472.95,
+        "min_ms": 208.86,
+        "max_ms": 476.38
+      }
+    },
+    "model_distribution": {
+      "gpt-4o-mini": 98
+    }
+  },
+  "baseline": {
+    "endpoint": "baseline:gpt-4o",
+    "total_requests": 100,
+    "successful_requests": 95,
+    "error_count": 5,
+    "timeout_count": 0,
+    "latency": {
+      "count": 95,
+      "mean_ms": 436.16,
+      "median_ms": 436.9,
+      "p90_ms": 560.88,
+      "p95_ms": 588.86,
+      "p99_ms": 630.4,
+      "min_ms": 243.79,
+      "max_ms": 632.81
+    },
+    "cost": {
+      "total_prompt_tokens": 7421,
+      "total_completion_tokens": 23731,
+      "total_tokens": 31152,
+      "estimated_cost_usd": 0.255862,
+      "cost_per_prompt_avg_usd": 0.002693,
+      "cost_per_prompt_p50_usd": 0.002675,
+      "cost_per_prompt_p95_usd": 0.004205
+    },
+    "latency_by_category": {
+      "code_generation": {
+        "count": 13,
+        "mean_ms": 462.26,
+        "median_ms": 468.97,
+        "p90_ms": 545.12,
+        "p95_ms": 560.62,
+        "p99_ms": 574.07,
+        "min_ms": 243.79,
+        "max_ms": 577.43
+      },
+      "technical_knowledge": {
+        "count": 13,
+        "mean_ms": 445.81,
+        "median_ms": 431.93,
+        "p90_ms": 527.22,
+        "p95_ms": 571.0,
+        "p99_ms": 610.33,
+        "min_ms": 348.53,
+        "max_ms": 620.16
+      },
+      "creative_writing": {
+        "count": 12,
+        "mean_ms": 473.97,
+        "median_ms": 482.17,
+        "p90_ms": 587.14,
+        "p95_ms": 589.61,
+        "p99_ms": 591.83,
+        "min_ms": 244.51,
+        "max_ms": 592.39
+      },
+      "math": {
+        "count": 12,
+        "mean_ms": 402.85,
+        "median_ms": 410.89,
+        "p90_ms": 478.54,
+        "p95_ms": 484.54,
+        "p99_ms": 486.6,
+        "min_ms": 301.56,
+        "max_ms": 487.11
+      },
+      "reasoning": {
+        "count": 10,
+        "mean_ms": 525.45,
+        "median_ms": 546.87,
+        "p90_ms": 630.51,
+        "p95_ms": 631.66,
+        "p99_ms": 632.58,
+        "min_ms": 246.58,
+        "max_ms": 632.81
+      },
+      "summarization": {
+        "count": 11,
+        "mean_ms": 352.72,
+        "median_ms": 349.55,
+        "p90_ms": 401.2,
+        "p95_ms": 424.88,
+        "p99_ms": 443.82,
+        "min_ms": 267.59,
+        "max_ms": 448.55
+      },
+      "general_knowledge": {
+        "count": 12,
+        "mean_ms": 384.8,
+        "median_ms": 398.69,
+        "p90_ms": 434.8,
+        "p95_ms": 444.42,
+        "p99_ms": 453.72,
+        "min_ms": 253.42,
+        "max_ms": 456.05
+      },
+      "instruction_following": {
+        "count": 12,
+        "mean_ms": 446.42,
+        "median_ms": 457.69,
+        "p90_ms": 527.1,
+        "p95_ms": 558.21,
+        "p99_ms": 587.72,
+        "min_ms": 312.77,
+        "max_ms": 595.1
+      }
+    },
+    "model_distribution": {
+      "gpt-4o": 95
+    }
+  },
+  "comparison": {
+    "cost_savings_ratio": 0.0987,
+    "latency_diff_mean_ms": -129.39,
+    "latency_diff_p50_ms": -138.09
+  },
+  "quality": {
+    "pairwise": {
+      "router_wins": 51,
+      "baseline_wins": 30,
+      "ties": 18,
+      "total_judged": 99,
+      "router_win_rate": 0.5152,
+      "baseline_win_rate": 0.303,
+      "tie_rate": 0.1818
+    },
+    "absolute_scores": {
+      "router_overall": 3.836,
+      "baseline_overall": 3.75,
+      "router_by_dimension": {
+        "accuracy": 3.859,
+        "completeness": 3.798,
+        "clarity": 3.818,
+        "helpfulness": 3.869
+      },
+      "baseline_by_dimension": {
+        "accuracy": 3.697,
+        "completeness": 3.768,
+        "clarity": 3.848,
+        "helpfulness": 3.687
+      }
+    },
+    "win_rate_by_category": {
+      "code_generation": {
+        "router_win_rate": 0.3333,
+        "baseline_win_rate": 0.4167,
+        "tie_rate": 0.25,
+        "count": 12
+      },
+      "technical_knowledge": {
+        "router_win_rate": 0.6154,
+        "baseline_win_rate": 0.3846,
+        "tie_rate": 0.0,
+        "count": 13
+      },
+      "creative_writing": {
+        "router_win_rate": 0.6154,
+        "baseline_win_rate": 0.3077,
+        "tie_rate": 0.0769,
+        "count": 13
+      },
+      "math": {
+        "router_win_rate": 0.6154,
+        "baseline_win_rate": 0.1538,
+        "tie_rate": 0.2308,
+        "count": 13
+      },
+      "reasoning": {
+        "router_win_rate": 0.25,
+        "baseline_win_rate": 0.5833,
+        "tie_rate": 0.1667,
+        "count": 12
+      },
+      "summarization": {
+        "router_win_rate": 0.5833,
+        "baseline_win_rate": 0.0833,
+        "tie_rate": 0.3333,
+        "count": 12
+      },
+      "general_knowledge": {
+        "router_win_rate": 0.5833,
+        "baseline_win_rate": 0.3333,
+        "tie_rate": 0.0833,
+        "count": 12
+      },
+      "instruction_following": {
+        "router_win_rate": 0.5,
+        "baseline_win_rate": 0.1667,
+        "tie_rate": 0.3333,
+        "count": 12
+      }
+    },
+    "router_win_rate_ci_95": [
+      0.4141,
+      0.6162
+    ]
+  }
+}

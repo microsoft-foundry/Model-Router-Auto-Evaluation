@@ -1,0 +1,10 @@
+{"id": "sample_001", "prompt": "Explain the difference between TCP and UDP protocols.", "category": "technical_knowledge", "difficulty": "medium"}
+{"id": "sample_002", "prompt": "Write a Python function that checks if a string is a palindrome.", "category": "code_generation", "difficulty": "easy"}
+{"id": "sample_003", "prompt": "What are the main causes of the French Revolution?", "category": "general_knowledge", "difficulty": "medium"}
+{"id": "sample_004", "prompt": "Solve: If a train travels at 60 mph for 2.5 hours, how far does it go?", "category": "math", "difficulty": "easy"}
+{"id": "sample_005", "prompt": "Write a short story about a robot discovering music for the first time.", "category": "creative_writing", "difficulty": "medium"}
+{"id": "sample_006", "prompt": "Summarize the key principles of object-oriented programming in 3 sentences.", "category": "summarization", "difficulty": "easy"}
+{"id": "sample_007", "prompt": "A farmer has 17 sheep. All but 9 die. How many are left?", "category": "reasoning", "difficulty": "easy"}
+{"id": "sample_008", "prompt": "Explain quantum entanglement to a 10-year-old.", "category": "general_knowledge", "difficulty": "hard"}
+{"id": "sample_009", "prompt": "Write a SQL query to find the second highest salary from an employees table.", "category": "code_generation", "difficulty": "medium"}
+{"id": "sample_010", "prompt": "List exactly 5 benefits of regular exercise. Format as a numbered list.", "category": "instruction_following", "difficulty": "easy"}

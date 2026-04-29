@@ -1,0 +1,27 @@
+# Foundry Evaluation SDK configuration
+# Requires: pip install -e ".[foundry]"
+# Requires: az login (DefaultAzureCredential)
+
+foundry:
+  project_endpoint: "${AZURE_AI_PROJECT_ENDPOINT}"
+  model_deployment_name: "${AZURE_AI_MODEL_DEPLOYMENT_NAME}"
+
+graders:
+  quality:
+    enabled: true
+    absolute_template: "configs/grader_prompts/quality_absolute.yaml"
+    pairwise_template: "configs/grader_prompts/quality_pairwise.yaml"
+    pass_threshold: 3
+    range: [1, 5]
+  cost:
+    enabled: true
+    evaluator_name: "mr_cost_comparison"
+    pass_threshold: 0.5
+  latency:
+    enabled: true
+    evaluator_name: "mr_latency_comparison"
+    pass_threshold: 0.5
+
+output:
+  directory: "results/foundry-eval"
+  formats: ["markdown", "json"]

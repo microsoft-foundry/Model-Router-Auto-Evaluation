@@ -1,0 +1,147 @@
+# Default evaluation configuration
+# See .env.example for required environment variables
+
+evaluation:
+  name: "model-router-vs-gpt5"
+  dataset: "datasets/sample_custom.jsonl"
+  sample_size: null          # null = use all, or integer for subset
+  random_seed: 42
+
+endpoints:
+  model_router:
+    type: "azure_openai"
+    endpoint_url: "${AZURE_MODEL_ROUTER_ENDPOINT}"
+    api_key: "${AZURE_MODEL_ROUTER_KEY}"
+    deployment_name: "${AZURE_MODEL_ROUTER_DEPLOYMENT}"
+    parameters:
+      temperature: 0.7
+      max_tokens: 1024
+
+  baseline:
+    type: "azure_openai"
+    endpoint_url: "${AZURE_OPENAI_ENDPOINT}"
+    api_key: "${AZURE_OPENAI_KEY}"
+    deployment_name: "${AZURE_BASELINE_DEPLOYMENT}"
+    parameters:
+      max_tokens: 1024
+
+pricing:                     # USD per 1M tokens
+  # ── Model Router markup (input-only charge) ──
+  model_router:
+    input: 0.50
+    output: 1.50
+
+  # ── Azure OpenAI models (Global Standard pricing) ──
+  # GPT-4.1 series
+  gpt-4.1:
+    input: 2.00
+    output: 8.00
+  gpt-4.1-mini:
+    input: 0.40
+    output: 1.60
+  gpt-4.1-nano:
+    input: 0.10
+    output: 0.40
+
+  # GPT-4o series
+  gpt-4o:
+    input: 2.50
+    output: 10.00
+  gpt-4o-mini:
+    input: 0.15
+    output: 0.60
+
+  # o-series
+  o4-mini:
+    input: 1.10
+    output: 4.40
+
+  # GPT-5 series
+  gpt-5:
+    input: 1.25
+    output: 10.00
+  gpt-5-mini:
+    input: 0.25
+    output: 2.00
+  gpt-5-nano:
+    input: 0.05
+    output: 0.40
+  gpt-5-chat:
+    input: 1.25
+    output: 10.00
+
+  # GPT-5.2 series
+  gpt-5.2:
+    input: 1.75
+    output: 14.00
+  gpt-5.2-chat:
+    input: 1.75
+    output: 14.00
+
+  # GPT-OSS
+  gpt-oss-120b:
+    input: 0.15
+    output: 0.60
+
+  # ── Anthropic models (Azure Marketplace pricing) ──
+  # Source: https://platform.claude.com/docs/en/docs/about-claude/models
+  claude-haiku-4-5:
+    input: 1.00
+    output: 5.00
+  claude-sonnet-4-5:
+    input: 3.00
+    output: 15.00
+  claude-opus-4-1:
+    input: 15.00
+    output: 75.00
+  claude-opus-4-6:
+    input: 5.00
+    output: 25.00
+
+  # ── xAI models (Azure Marketplace pricing) ──
+  # Source: https://x.ai/api
+  grok-4:
+    input: 2.00
+    output: 6.00
+  grok-4-fast-reasoning:
+    input: 0.20
+    output: 0.50
+
+  # ── DeepSeek models (Azure Marketplace pricing) ──
+  # Source: https://api-docs.deepseek.com
+  DeepSeek-V3.1:
+    input: 0.27
+    output: 1.10
+  DeepSeek-V3.2:
+    input: 0.27
+    output: 1.10
+
+  # ── Meta models (Azure Marketplace pricing) ──
+  Llama-4-Maverick-17B-128E-Instruct-FP8:
+    input: 0.20
+    output: 0.20
+
+concurrency:
+  max_parallel_requests: 5
+  request_timeout_seconds: 60
+  max_retries: 3
+
+output:
+  directory: "results"          # base dir only; run_eval.py creates results/run-<unix_timestamp>/ automatically
+  formats: ["markdown", "csv", "json"]
+
+# LLM-as-a-judge quality evaluation (optional)
+# Set enabled: true and configure the judge endpoint to run quality scoring
+judge:
+  enabled: true
+  endpoint:
+    type: "azure_openai"
+    endpoint_url: "${AZURE_JUDGE_ENDPOINT}"
+    api_key: "${AZURE_JUDGE_KEY}"
+    deployment_name: "${AZURE_JUDGE_DEPLOYMENT}"
+    parameters: {}
+  pairwise_template: "configs/judge_prompts/pairwise.yaml"
+  absolute_template: "configs/judge_prompts/absolute.yaml"
+  max_parallel: 3
+  timeout_seconds: 90
+  max_retries: 2

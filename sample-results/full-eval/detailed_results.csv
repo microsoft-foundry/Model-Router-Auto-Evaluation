@@ -1,0 +1,11 @@
+prompt_id,category,difficulty,prompt_text,router_model,router_latency_ms,router_prompt_tokens,router_completion_tokens,router_total_tokens,router_status,baseline_model,baseline_latency_ms,baseline_prompt_tokens,baseline_completion_tokens,baseline_total_tokens,baseline_status
+sample_001,technical_knowledge,medium,Explain the difference between TCP and UDP protocols.,gpt-5-mini-2025-08-07,18986.62,15,936,951,success,gpt-5-2025-08-07,15758.43,15,1024,1039,success
+sample_002,code_generation,easy,Write a Python function that checks if a string is a palindrome.,grok-4-fast-reasoning,13527.23,13,142,339,success,gpt-5-2025-08-07,15375.02,19,709,728,success
+sample_003,general_knowledge,medium,What are the main causes of the French Revolution?,grok-4-fast-reasoning,22220.44,10,933,1200,success,gpt-5-2025-08-07,13005.0,16,1024,1040,success
+sample_004,math,easy,"Solve: If a train travels at 60 mph for 2.5 hours, how far does it go?",gpt-oss-120b,2836.58,90,162,252,success,gpt-5-2025-08-07,3096.3,29,36,65,success
+sample_005,creative_writing,medium,Write a short story about a robot discovering music for the first time.,grok-4-fast-reasoning,18711.3,14,643,823,success,gpt-5-2025-08-07,13079.58,20,1024,1044,success
+sample_006,summarization,easy,Summarize the key principles of object-oriented programming in 3 sentences.,grok-4-fast-reasoning,11755.55,14,102,238,success,gpt-5-2025-08-07,6891.83,21,270,291,success
+sample_007,reasoning,easy,A farmer has 17 sheep. All but 9 die. How many are left?,gpt-oss-120b,993.69,85,106,191,success,gpt-5-2025-08-07,2261.51,24,100,124,success
+sample_008,general_knowledge,hard,Explain quantum entanglement to a 10-year-old.,grok-4-fast-reasoning,8879.87,10,157,327,success,gpt-5-2025-08-07,15538.81,18,1024,1042,success
+sample_009,code_generation,medium,Write a SQL query to find the second highest salary from an employees table.,grok-4-fast-reasoning,8025.23,15,30,229,success,gpt-5-2025-08-07,15239.19,21,986,1007,success
+sample_010,instruction_following,easy,List exactly 5 benefits of regular exercise. Format as a numbered list.,gpt-5-mini-2025-08-07,4730.08,21,237,258,success,gpt-5-2025-08-07,7265.1,21,425,446,success

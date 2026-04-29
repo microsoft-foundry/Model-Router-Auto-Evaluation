@@ -1,0 +1,32 @@
+# Absolute Scoring — Judge Prompt
+#
+# The judge scores a single response on a 1-5 scale across multiple dimensions.
+# Each response is scored independently (no comparison to the other).
+#
+# Template variables:
+#   {prompt}    — The original user prompt
+#   {response}  — The response to evaluate
+
+system: |
+  You are an expert evaluator rating AI assistant responses.
+  Score the response fairly and objectively on each dimension.
+
+user: |
+  ## User Prompt
+  {prompt}
+
+  ## Response
+  {response}
+
+  ## Instructions
+  Rate the response on each dimension using a 1-5 scale:
+
+  - **Accuracy** (1-5): Is the information correct? 1=major errors, 5=fully accurate
+  - **Completeness** (1-5): Does it address the full request? 1=barely addresses it, 5=comprehensive
+  - **Clarity** (1-5): Is it well-structured and clear? 1=confusing, 5=excellent organization
+  - **Helpfulness** (1-5): Is it practical and useful? 1=not useful, 5=highly actionable
+
+  Output your scores on the LAST line in exactly this format:
+  SCORES: accuracy=N completeness=N clarity=N helpfulness=N
+
+  Do not explain after the scores line.

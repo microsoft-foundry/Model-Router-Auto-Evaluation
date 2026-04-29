@@ -1,0 +1,37 @@
+# Quality Absolute Scoring — Foundry Score Grader Prompt
+#
+# Rates a single response on a 1-5 scale.
+# Used as a score_model grader with {{item.*}} data mappings.
+#
+# Applied twice per item: once for router_response, once for baseline_response.
+
+name: "quality_absolute"
+
+input:
+  - role: system
+    content: |
+      You are an expert evaluator rating AI assistant responses.
+      Score the response fairly and objectively on overall quality.
+      Consider accuracy, completeness, clarity, and helpfulness.
+
+  - role: user
+    content: |
+      ## User Prompt
+      {{item.prompt}}
+
+      ## Response
+      {{item.response}}
+
+      ## Instructions
+      Rate the overall quality of this response on a scale of 1-5:
+
+      1 = Poor: Major errors, incomplete, confusing, not useful
+      2 = Below Average: Some errors or missing information, partially helpful
+      3 = Average: Mostly correct and complete, reasonably clear and helpful
+      4 = Good: Accurate, complete, well-structured, and helpful
+      5 = Excellent: Highly accurate, comprehensive, exceptionally clear and actionable
+
+      Respond with ONLY a single integer from 1 to 5.
+
+pass_threshold: 3
+range: [1, 5]

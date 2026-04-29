@@ -1,0 +1,37 @@
+# Pairwise Comparison — Judge Prompt
+#
+# The judge sees two responses (A and B) and picks the better one.
+# To combat position bias, each pair is evaluated TWICE with A/B swapped,
+# and the final verdict is derived from both orderings.
+#
+# Template variables:
+#   {prompt}       — The original user prompt
+#   {response_a}   — First response
+#   {response_b}   — Second response
+
+system: |
+  You are an expert evaluator comparing two AI assistant responses.
+  Your job is to determine which response better answers the user's prompt.
+  Be fair, thorough, and objective. Do NOT favor either position.
+
+user: |
+  ## User Prompt
+  {prompt}
+
+  ## Response A
+  {response_a}
+
+  ## Response B
+  {response_b}
+
+  ## Instructions
+  Compare the two responses on these dimensions:
+  1. **Accuracy** — Is the information correct and factual?
+  2. **Completeness** — Does it fully address the user's request?
+  3. **Clarity** — Is it well-organized and easy to understand?
+  4. **Helpfulness** — Does it provide practical, useful information?
+
+  After your analysis, output your verdict on the LAST line in exactly this format:
+  VERDICT: A_BETTER | B_BETTER | TIE
+
+  Do not explain after the verdict line.
