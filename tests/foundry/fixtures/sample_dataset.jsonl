@@ -1,0 +1,5 @@
+{"id": "tp001", "prompt": "Explain the difference between TCP and UDP protocols.", "category": "technical_knowledge", "difficulty": "medium"}
+{"id": "tp002", "prompt": "Write a Python function that checks if a string is a palindrome.", "category": "code_generation", "difficulty": "easy"}
+{"id": "tp003", "prompt": "What are the main causes of the French Revolution?", "category": "general_knowledge", "difficulty": "medium"}
+{"id": "tp004", "prompt": "If a train travels at 60 mph for 2.5 hours, how far does it go?", "category": "math", "difficulty": "easy"}
+{"id": "tp005", "prompt": "Explain quantum entanglement to a 10-year-old.", "category": "general_knowledge", "difficulty": "hard"}

@@ -1,0 +1,42 @@
+# Quick test config — uses literal values so no .env needed for dry-run validation
+evaluation:
+  name: "quick-test"
+  dataset: "datasets/sample_custom.jsonl"
+  sample_size: 5
+  random_seed: 42
+
+endpoints:
+  model_router:
+    type: "azure_openai"
+    endpoint_url: "https://placeholder.openai.azure.com"
+    api_key: "placeholder-key"
+    deployment_name: "model-router"
+    parameters:
+      temperature: 0.7
+      max_tokens: 512
+
+  baseline:
+    type: "azure_openai"
+    endpoint_url: "https://placeholder.openai.azure.com"
+    api_key: "placeholder-key"
+    deployment_name: "gpt-4o"
+    parameters:
+      temperature: 0.7
+      max_tokens: 512
+
+pricing:
+  model_router:
+    input: 0.50
+    output: 1.50
+  gpt-4o:
+    input: 2.50
+    output: 10.00
+
+concurrency:
+  max_parallel_requests: 2
+  request_timeout_seconds: 30
+  max_retries: 2
+
+output:
+  directory: "results"
+  formats: ["markdown"]

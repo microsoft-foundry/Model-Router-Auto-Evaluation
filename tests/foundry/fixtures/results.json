@@ -1,0 +1,55 @@
+{
+  "evaluation_name": "test-fixture-eval",
+  "dataset": "tests/foundry/fixtures/sample_dataset.jsonl",
+  "model_router": {
+    "endpoint": "model_router",
+    "total_requests": 5,
+    "successful_requests": 5,
+    "error_count": 0,
+    "timeout_count": 0,
+    "latency": {
+      "count": 5,
+      "mean_ms": 3070.0,
+      "median_ms": 2800.0,
+      "p90_ms": 7120.0,
+      "p95_ms": 7560.0,
+      "p99_ms": 7912.0,
+      "min_ms": 450.0,
+      "max_ms": 8000.0
+    },
+    "cost": {
+      "total_prompt_tokens": 68,
+      "total_completion_tokens": 365,
+      "total_tokens": 433,
+      "estimated_cost_usd": 0.00043
+    },
+    "model_distribution": {
+      "gpt-5-mini-2025-08-07": 2,
+      "grok-4-fast-reasoning": 2,
+      "gpt-oss-120b": 1
+    }
+  },
+  "baseline": {
+    "endpoint": "baseline:gpt-5",
+    "total_requests": 5,
+    "successful_requests": 5,
+    "error_count": 0,
+    "timeout_count": 0,
+    "latency": {
+      "count": 5,
+      "mean_ms": 1940.0,
+      "median_ms": 1200.0,
+      "p90_ms": 4280.0,
+      "p95_ms": 4640.0,
+      "p99_ms": 4928.0,
+      "min_ms": 900.0,
+      "max_ms": 5000.0
+    },
+    "cost": {
+      "total_prompt_tokens": 68,
+      "total_completion_tokens": 320,
+      "total_tokens": 388,
+      "estimated_cost_usd": 0.00388
+    }
+  }
+}

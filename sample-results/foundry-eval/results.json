@@ -1,0 +1,293 @@
+{
+  "eval_id": "eval_REDACTED",
+  "run_id": "evalrun_REDACTED",
+  "status": "completed",
+  "report_url": "https://ai.azure.com/build/evaluations/<eval-id>/run/<run-id>",
+  "generated_at": "2026-04-25T05:11:32.360293+00:00",
+  "result_counts": {
+    "errored": 0,
+    "failed": 6,
+    "passed": 4,
+    "total": 10
+  },
+  "grader_summary": {
+    "quality_absolute_router": {
+      "mean": 4.4,
+      "pass_rate": 90.0,
+      "count": 10
+    },
+    "quality_absolute_baseline": {
+      "mean": 3.2,
+      "pass_rate": 60.0,
+      "count": 10
+    },
+    "quality_pairwise": {
+      "mean": 3.9,
+      "pass_rate": 90.0,
+      "count": 10
+    },
+    "mr_cost_comparison": {
+      "mean": 0.953,
+      "pass_rate": 100.0,
+      "count": 10
+    },
+    "mr_latency_comparison": {
+      "mean": 0.498,
+      "pass_rate": 60.0,
+      "count": 10
+    }
+  },
+  "output_items_count": 10,
+  "per_item_scores": [
+    {
+      "prompt_id": "sample_001",
+      "scores": {
+        "quality_absolute_router": {
+          "score": 5.0,
+          "passed": true
+        },
+        "quality_absolute_baseline": {
+          "score": 1.0,
+          "passed": false
+        },
+        "quality_pairwise": {
+          "score": 5.0,
+          "passed": true
+        },
+        "mr_cost_comparison": {
+          "score": 0.953395990349938,
+          "passed": true
+        },
+        "mr_latency_comparison": {
+          "score": 0.39757260082381307,
+          "passed": false
+        }
+      }
+    },
+    {
+      "prompt_id": "sample_002",
+      "scores": {
+        "quality_absolute_router": {
+          "score": 5.0,
+          "passed": true
+        },
+        "quality_absolute_baseline": {
+          "score": 5.0,
+          "passed": true
+        },
+        "quality_pairwise": {
+          "score": 4.0,
+          "passed": true
+        },
+        "mr_cost_comparison": {
+          "score": 0.9891592673789533,
+          "passed": true
+        },
+        "mr_latency_comparison": {
+          "score": 0.5600906535406133,
+          "passed": true
+        }
+      }
+    },
+    {
+      "prompt_id": "sample_003",
+      "scores": {
+        "quality_absolute_router": {
+          "score": 4.0,
+          "passed": true
+        },
+        "quality_absolute_baseline": {
+          "score": 1.0,
+          "passed": false
+        },
+        "quality_pairwise": {
+          "score": 5.0,
+          "passed": true
+        },
+        "mr_cost_comparison": {
+          "score": 0.9538324670762518,
+          "passed": true
+        },
+        "mr_latency_comparison": {
+          "score": 0.14569627066512886,
+          "passed": false
+        }
+      }
+    },
+    {
+      "prompt_id": "sample_004",
+      "scores": {
+        "quality_absolute_router": {
+          "score": 5.0,
+          "passed": true
+        },
+        "quality_absolute_baseline": {
+          "score": 5.0,
+          "passed": true
+        },
+        "quality_pairwise": {
+          "score": 3.0,
+          "passed": true
+        },
+        "mr_cost_comparison": {
+          "score": 0.802600750002041,
+          "passed": true
+        },
+        "mr_latency_comparison": {
+          "score": 0.5419403804540904,
+          "passed": true
+        }
+      }
+    },
+    {
+      "prompt_id": "sample_005",
+      "scores": {
+        "quality_absolute_router": {
+          "score": 5.0,
+          "passed": true
+        },
+        "quality_absolute_baseline": {
+          "score": 1.0,
+          "passed": false
+        },
+        "quality_pairwise": {
+          "score": 5.0,
+          "passed": true
+        },
+        "mr_cost_comparison": {
+          "score": 0.9679577366843923,
+          "passed": true
+        },
+        "mr_latency_comparison": {
+          "score": 0.2847132706096067,
+          "passed": false
+        }
+      }
+    },
+    {
+      "prompt_id": "sample_006",
+      "scores": {
+        "quality_absolute_router": {
+          "score": 4.0,
+          "passed": true
+        },
+        "quality_absolute_baseline": {
+          "score": 4.0,
+          "passed": true
+        },
+        "quality_pairwise": {
+          "score": 4.0,
+          "passed": true
+        },
+        "mr_cost_comparison": {
+          "score": 0.9797033989939019,
+          "passed": true
+        },
+        "mr_latency_comparison": {
+          "score": 0.14713871352021168,
+          "passed": false
+        }
+      }
+    },
+    {
+      "prompt_id": "sample_007",
+      "scores": {
+        "quality_absolute_router": {
+          "score": 5.0,
+          "passed": true
+        },
+        "quality_absolute_baseline": {
+          "score": 5.0,
+          "passed": true
+        },
+        "quality_pairwise": {
+          "score": 3.0,
+          "passed": true
+        },
+        "mr_cost_comparison": {
+          "score": 0.9215722065821894,
+          "passed": true
+        },
+        "mr_latency_comparison": {
+          "score": 0.7803038677697645,
+          "passed": true
+        }
+      }
+    },
+    {
+      "prompt_id": "sample_008",
+      "scores": {
+        "quality_absolute_router": {
+          "score": 2.0,
+          "passed": false
+        },
+        "quality_absolute_baseline": {
+          "score": 1.0,
+          "passed": false
+        },
+        "quality_pairwise": {
+          "score": 5.0,
+          "passed": true
+        },
+        "mr_cost_comparison": {
+          "score": 0.99183968231601,
+          "passed": true
+        },
+        "mr_latency_comparison": {
+          "score": 0.7142680166627946,
+          "passed": true
+        }
+      }
+    },
+    {
+      "prompt_id": "sample_009",
+      "scores": {
+        "quality_absolute_router": {
+          "score": 5.0,
+          "passed": true
+        },
+        "quality_absolute_baseline": {
+          "score": 5.0,
+          "passed": true
+        },
+        "quality_pairwise": {
+          "score": 2.0,
+          "passed": false
+        },
+        "mr_cost_comparison": {
+          "score": 0.9977246859040458,
+          "passed": true
+        },
+        "mr_latency_comparison": {
+          "score": 0.7366910577268215,
+          "passed": true
+        }
+      }
+    },
+    {
+      "prompt_id": "sample_010",
+      "scores": {
+        "quality_absolute_router": {
+          "score": 4.0,
+          "passed": true
+        },
+        "quality_absolute_baseline": {
+          "score": 4.0,
+          "passed": true
+        },
+        "quality_pairwise": {
+          "score": 3.0,
+          "passed": true
+        },
+        "mr_cost_comparison": {
+          "score": 0.9705460760332263,
+          "passed": true
+        },
+        "mr_latency_comparison": {
+          "score": 0.6744655957935886,
+          "passed": true
+        }
+      }
+    }
+  ]
+}

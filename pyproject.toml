@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "foundry-model-router-eval"
+version = "0.1.0"
+description = "Benchmark Microsoft Foundry Model Router against baseline models on quality, cost, and latency"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+dependencies = [
+    "openai>=1.0",
+    "pyyaml>=6.0",
+    "pandas>=2.0",
+    "matplotlib>=3.7",
+    "tqdm>=4.65",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+    "ruff>=0.1",
+]
+db = [
+    "sqlalchemy>=2.0",
+]
+foundry = [
+    "azure-ai-projects>=2.1.0,<3.0",
+    "azure-identity>=1.15",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint.per-file-ignores]
+# Entry scripts must manipulate sys.path before importing the src package.
+"scripts/*.py" = ["E402"]
+# Notebook walkthrough adjusts sys.path before imports and uses tutorial-style code.
+"WALKTHROUGH.ipynb" = ["E401", "E402", "F401", "F541"]
+# Tests use single-letter loop variables in places.
+"tests/*.py" = ["E741"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "integration: marks tests that call real Azure APIs (deselect with '-m \"not integration\"')",
+    "live: marks tests requiring live Foundry endpoint (deselect with '-m \"not live\"')",
+]

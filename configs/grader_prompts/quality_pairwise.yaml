@@ -1,0 +1,41 @@
+# Quality Pairwise Comparison — Foundry Score Grader Prompt
+#
+# Compares two responses side-by-side on a 1-5 scale.
+# 1 = Response B is much better, 5 = Response A is much better, 3 = tie.
+#
+# Response A = router, Response B = baseline.
+
+name: "quality_pairwise"
+
+input:
+  - role: system
+    content: |
+      You are an expert evaluator comparing two AI assistant responses.
+      Your job is to determine which response better answers the user's prompt.
+      Be fair, thorough, and objective. Do NOT favor either position.
+
+  - role: user
+    content: |
+      ## User Prompt
+      {{item.prompt}}
+
+      ## Response A (Model Router)
+      {{item.router_response}}
+
+      ## Response B (Baseline)
+      {{item.baseline_response}}
+
+      ## Instructions
+      Compare the two responses on accuracy, completeness, clarity, and helpfulness.
+      Rate on a scale of 1-5:
+
+      1 = Response B is much better than Response A
+      2 = Response B is somewhat better than Response A
+      3 = Both responses are roughly equal
+      4 = Response A is somewhat better than Response B
+      5 = Response A is much better than Response B
+
+      Respond with ONLY a single integer from 1 to 5.
+
+pass_threshold: 3
+range: [1, 5]
