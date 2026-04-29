@@ -1,0 +1,124 @@
+name: 🐛 Bug report
+description: Something is broken or behaving unexpectedly in the evaluation toolkit.
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report! Please fill in as much of the form below as you can — the more detail you provide, the faster we can help.
+
+        > **Before you submit:** Please search [existing issues](https://github.com/microsoft-foundry/Model-Router-Auto-Evaluation/issues?q=is%3Aissue) to avoid duplicates, and check the [FAQ](../blob/main/docs/faq.md) for known issues.
+
+  - type: checkboxes
+    id: prereqs
+    attributes:
+      label: Pre-flight checklist
+      description: Please confirm the following before submitting.
+      options:
+        - label: I have searched existing issues and this is not a duplicate.
+          required: true
+        - label: I have read the [FAQ](../blob/main/docs/faq.md).
+          required: true
+        - label: I have removed any API keys, endpoints, or other secrets from logs and config snippets I paste below.
+          required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: A clear, concise description of the bug.
+      placeholder: When I run `python scripts/run_eval.py --dry-run`, the script crashes with a KeyError.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands and inputs we can run to see the bug ourselves.
+      placeholder: |
+        1. Clone the repo at commit <SHA>
+        2. Create `.env` with the following variables (values redacted): ...
+        3. Run `python scripts/run_eval.py --dataset datasets/sample_custom.jsonl --sample-size 5`
+        4. See the error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: What actually happened? Include error messages, stack traces, or unexpected output. Use code fences (```) for readability.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: pipeline
+    attributes:
+      label: Which part of the pipeline is affected?
+      options:
+        - Local evaluation (scripts/run_eval.py)
+        - Foundry cloud evaluation (scripts/run_foundry_eval.py)
+        - Comparison or export scripts (compare_results.py / export_results.py)
+        - WALKTHROUGH.ipynb (Jupyter notebook)
+        - Configuration (configs/*.yaml)
+        - Dataset loading (JSONL / CSV / SQL)
+        - Reporting / dashboard / charts
+        - Tests (pytest)
+        - Documentation
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python version
+      description: Output of `python --version`
+      placeholder: "3.11.7"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: "Windows 11 / macOS 14.4 / Ubuntu 22.04"
+    validations:
+      required: true
+
+  - type: input
+    id: package-version
+    attributes:
+      label: Repo commit or release
+      description: Output of `git rev-parse --short HEAD` or the release tag you are using.
+      placeholder: "abc1234 or v1.0.0"
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Relevant configuration
+      description: A redacted snippet of the YAML config or environment variables involved. **Do not include API keys.**
+      render: yaml
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and screenshots
+      description: Paste any relevant terminal output, stack traces, or screenshots. Redact secrets first.
+      render: shell
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else we should know — workarounds tried, related issues, hypotheses, etc.

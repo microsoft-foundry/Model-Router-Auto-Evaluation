@@ -1,0 +1,47 @@
+name: 📚 Documentation issue
+description: Something in the README, QUICKSTART, docs/, or notebook is wrong, missing, or unclear.
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the documentation. Clear docs are a feature — please tell us what tripped you up.
+
+  - type: input
+    id: page
+    attributes:
+      label: Which page or file?
+      description: Path or URL of the doc that needs attention.
+      placeholder: "docs/how-to-run-live-eval.md, README.md, WALKTHROUGH.ipynb cell 5, ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: What is wrong, missing, or unclear?
+      placeholder: |
+        - The instructions assume `az login` already works, but I had no Azure account yet.
+        - The example config refers to a model deployment name that doesn't exist in the default config.
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested improvement
+      description: Optional — if you have wording in mind, drop it here.
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Reader audience this affects
+      options:
+        - First-time / beginner user
+        - Developer extending the toolkit
+        - Operator running large-scale evaluations
+        - Foundry / cloud-eval user
+        - Other
+    validations:
+      required: true
