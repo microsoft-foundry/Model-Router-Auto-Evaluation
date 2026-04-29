@@ -1,0 +1,39 @@
+name: 💬 Feedback
+description: Share your experience using the toolkit — what worked, what didn't, what surprised you.
+title: "[Feedback]: "
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing! Feedback helps us understand how the toolkit is used in the real world. There are no required fields — fill in whatever is useful.
+
+        > For free-form questions, please use [Microsoft Foundry Discord](https://aka.ms/foundry/discord) instead.
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: How are you using the toolkit?
+      placeholder: "Comparing Model Router against gpt-5 on ~500 internal customer-support prompts."
+
+  - type: textarea
+    id: worked
+    attributes:
+      label: What worked well?
+
+  - type: textarea
+    id: friction
+    attributes:
+      label: Where did you hit friction?
+      description: Confusing docs, broken behaviour, missing features, surprising results — anything.
+
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Did the evaluation help you make a decision?
+      description: e.g. adopted Model Router, kept the baseline, found a quality regression, identified a cost saving.
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Anything else?

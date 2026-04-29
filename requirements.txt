@@ -1,12 +1,21 @@
 # Core dependencies for Microsoft Foundry Model Router Evaluation
+#
+# This is an "install everything" file: it pulls in core, notebook, and Foundry
+# extras together so a single `pip install -r requirements.txt` works for all
+# scripts in this repo. For finer control, use the equivalent extras declared
+# in pyproject.toml: `pip install -e .` (core), `.[foundry]`, `.[dev]`, `.[db]`.
+
+# --- Core (required by scripts/run_eval.py and src/) ---
 openai>=1.0
 pyyaml>=6.0
-pandas>=2.0
 matplotlib>=3.7
+numpy>=1.24
 tqdm>=4.65
 python-dotenv>=1.0
+
+# --- Notebook walkthrough (only needed for WALKTHROUGH.ipynb) ---
 ipykernel>=6.0
 
-# Microsoft Foundry cloud evaluation (optional — needed for scripts/run_foundry_eval.py)
+# --- Microsoft Foundry cloud evaluation (scripts/run_foundry_eval.py) ---
 azure-ai-projects>=2.1.0,<3.0
 azure-identity>=1.15

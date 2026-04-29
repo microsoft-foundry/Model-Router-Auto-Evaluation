@@ -2,7 +2,9 @@
 
 Technical design, component diagram, and extension points for the Model Router Evaluation toolkit.
 
-## Component Diagram
+> **Audience:** This page is for contributors who want to read or extend the source code, not for users running evaluations. If you just want to run an evaluation, the [QUICKSTART](../QUICKSTART.md), [how-to-run-live-eval.md](how-to-run-live-eval.md), and [how-to-interpret-results.md](how-to-interpret-results.md) cover everything you need.
+
+## Component diagram
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐

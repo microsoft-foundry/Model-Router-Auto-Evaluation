@@ -1,19 +1,23 @@
-# How To: Resume Interrupted Runs & Scale to 1000+ Prompts
+# How To: Resume Interrupted Runs & Scale to 1,000+ Prompts
 
-## Checkpoint / Resume
+Long runs get interrupted — by Ctrl+C, by network blips, by the laptop closing at the end of the day. This guide explains the **checkpoint system** that makes those interruptions safe, and how to tune the tool for **larger benchmarks** (1,000+ prompts).
 
-Every result is flushed to disk immediately after the API call returns. If the process is interrupted (Ctrl+C, crash, machine reboot), all completed work is saved.
+> **Why this matters:** A 1,000-prompt run takes hours and costs real money. Without checkpointing, an interruption near the end means re-paying for everything. With checkpointing, you pick up exactly where you left off.
+
+## Checkpoint / resume
+
+Every result is flushed to disk immediately after the API call returns. If the process is interrupted (Ctrl+C, crash, machine reboot, network failure), all completed work is saved.
 
 ### How it works
 
-Two checkpoint files are maintained in the output directory:
+Two checkpoint files are maintained in the output directory while the run is in progress:
 
 | File | Contents |
 |------|----------|
 | `checkpoint_eval.jsonl` | One line per API response (router + baseline) |
 | `checkpoint_judge.jsonl` | One line per judge evaluation |
 
-A prompt is "completed" only when **both** endpoints (model_router + baseline) have returned. A half-finished prompt is automatically re-evaluated on resume.
+A prompt is "completed" only when **both** endpoints (model_router + baseline) have returned. A half-finished prompt is automatically re-evaluated on resume — you'll never see a row with one endpoint missing.
 
 ### Resume a run
 
@@ -36,11 +40,9 @@ Pressing Ctrl+C triggers a graceful shutdown instead of a hard kill:
   Resume with: python scripts/run_eval.py --resume --output-dir results/default
 ```
 
-In-flight API calls finish, results are flushed, and the exact resume command is printed.
+In-flight API calls finish, results are flushed, and the exact resume command is printed for you to copy. On successful completion of the full run, checkpoint files are automatically deleted.
 
-On successful completion, checkpoint files are automatically deleted.
-
-## Scaling to 1000+ Prompts
+## Scaling to 1,000+ prompts
 
 ### Use the large-scale config
 
@@ -48,7 +50,7 @@ On successful completion, checkpoint files are automatically deleted.
 python scripts/run_eval.py --config configs/large_scale.yaml
 ```
 
-Key differences from default:
+Key differences from default — these are tuned for sustained throughput rather than first-run friendliness:
 
 | Setting | Default | Large Scale |
 |---------|---------|-------------|
@@ -71,13 +73,16 @@ These assume ~5 seconds per API call. Actual times vary by model latency and rat
 
 ### Dealing with rate limits
 
-If you see `429 Too Many Requests` errors:
+If you see `429 Too Many Requests` errors, your endpoint is throttling you. Options, in order of preference:
 
 1. **Reduce concurrency** — lower `max_parallel_requests` in your config
-2. **Increase retries** — the built-in exponential backoff handles transient 429s
+2. **Increase retries** — the built-in exponential backoff handles transient 429s automatically
 3. **Run across sessions** — use `--resume` to split a run across multiple sessions
+4. **Request higher Azure quota** — the long-term fix for sustained large-scale runs
 
 ### Multi-session workflow
+
+Perfectly fine to run a benchmark across days:
 
 ```bash
 # Session 1: start the run
@@ -91,15 +96,16 @@ python scripts/run_eval.py --resume --config configs/large_scale.yaml --output-d
 
 ### Memory usage
 
-All results are held in memory for metrics computation. For 1,000 prompts this is typically 50–200 MB, well within normal limits. The checkpoint files also serve as a disk-backed record.
+All results are held in memory for metrics computation. For 1,000 prompts this is typically 50–200 MB — well within normal limits. The checkpoint files also serve as a disk-backed record, so memory is never the bottleneck.
 
-## Concurrency Model
+## Concurrency model (for the curious)
 
 | Component | Mechanism | Purpose |
 |-----------|-----------|---------|
 | Eval API calls | `asyncio.Semaphore` (configurable) | Prevent overwhelming endpoints |
 | Judge API calls | Separate `asyncio.Semaphore` | Independent limit for judge model |
-| Per-prompt | Sequential (router → baseline) | Fair latency comparison |
+| Per-prompt | Sequential (router → baseline) | Fair latency comparison — no interference between the two endpoints |
 | Overall dispatch | `asyncio.as_completed()` | Maximum throughput within semaphore limits |
 
 All I/O is async — no threads are blocked. Retry logic uses exponential backoff (1s, 2s, 4s, ...).
+

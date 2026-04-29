@@ -1,5 +1,13 @@
 # Microsoft Foundry — Model Router Auto Evaluation
 
+> **New here?** Start with the **[QUICKSTART](QUICKSTART.md)** for a no-keys-needed demo in under 2 minutes, then come back here for the full reference. If you prefer Jupyter, jump straight into **[WALKTHROUGH.ipynb](WALKTHROUGH.ipynb)**.
+
+## What is this?
+
+**Model Router** is a Microsoft Foundry feature that automatically picks the cheapest model that can answer each prompt well. This toolkit answers the question every team asks before adopting it: **"Will Model Router actually save me money on *my* workload without hurting quality?"**
+
+You plug in your prompts, point at your endpoints, and get a side-by-side report comparing Model Router to any baseline model on three things that matter: **quality**, **cost**, and **latency**.
+
 ## What You Get
 
 Automated quality, cost, and latency evaluation of Microsoft Foundry Model Router against any baseline model — bring your own prompts, get a full report in one command.
@@ -66,8 +74,8 @@ See [QUICKSTART.md](QUICKSTART.md) for the CLI quickstart details.
 **Prerequisites:** Python 3.9+, a Microsoft Foundry Model Router endpoint, and an Azure OpenAI baseline endpoint.
 
 ```bash
-git clone https://github.com/microsoft/foundry-model-router-autoeval.git
-cd foundry-model-router-autoeval
+git clone https://github.com/microsoft-foundry/Model-Router-Auto-Evaluation.git
+cd Model-Router-Auto-Evaluation
 ```
 
 #### Create a virtual environment (recommended)
@@ -266,19 +274,40 @@ Optional fields: `category`, `difficulty`, `ground_truth`, `metadata`. See [docs
 
 ## Documentation
 
+Full guides live in [`docs/`](docs/) — start with the [docs index](docs/README.md) for a suggested reading order tailored to your goal.
+
+### Start here (beginners)
+
 | Guide | Description |
 |-------|-------------|
-| [WALKTHROUGH.ipynb](WALKTHROUGH.ipynb) | Interactive step-by-step in Jupyter (no API keys) |
+| [WALKTHROUGH.ipynb](WALKTHROUGH.ipynb) | Interactive step-by-step in Jupyter — see every chart inline (no API keys) |
 | [QUICKSTART.md](QUICKSTART.md) | CLI quickstart — one command, open the dashboard |
-| [How to Run a Live Eval](docs/how-to-run-live-eval.md) | End-to-end walkthrough with real endpoints |
-| [Custom Datasets](docs/how-to-custom-dataset.md) | JSONL / CSV / database schema, examples, best practices |
-| [Interpreting Results](docs/how-to-interpret-results.md) | Reading the dashboard, report, and metrics |
-| [Resume & Scale](docs/how-to-resume-and-scale.md) | Checkpoint/resume, 1000+ prompt runs |
-| [Compare Runs](docs/how-to-compare-runs.md) | Side-by-side comparison of evaluation runs |
-| [Methodology](docs/methodology.md) | Scoring, cost formula, statistical approach |
-| [Architecture](docs/architecture.md) | Component design, data flow, extension points |
-| [Foundry Cloud Eval](docs/how-to-foundry-eval-sdk.md) | Cloud-based grading with Microsoft Foundry |
+| [How to Run a Live Eval](docs/how-to-run-live-eval.md) | End-to-end walkthrough with real Azure endpoints |
+| [Interpreting Results](docs/how-to-interpret-results.md) | What each chart and metric means, with a glossary |
+| [Custom Datasets](docs/how-to-custom-dataset.md) | JSONL / CSV / SQL schemas, examples, best practices |
 | [FAQ](docs/faq.md) | Troubleshooting, rate limits, Foundry issues |
+
+### Going deeper (intermediate)
+
+| Guide | Description |
+|-------|-------------|
+| [Resume & Scale](docs/how-to-resume-and-scale.md) | Checkpoint/resume, 1,000+ prompt runs, rate limits |
+| [Compare Runs](docs/how-to-compare-runs.md) | Side-by-side diff of two evaluations |
+| [Methodology](docs/methodology.md) | Scoring, cost formula, statistical approach, judge bias mitigation |
+
+### Microsoft Foundry cloud evaluation
+
+| Guide | Description |
+|-------|-------------|
+| [Foundry Cloud Eval](docs/how-to-foundry-eval-sdk.md) | Run grading in Microsoft Foundry with managed graders + portal visibility |
+| [Cost & Latency Design](docs/foundry-cost-latency-design.md) | Why we use Python graders for cost/latency in Foundry (advanced) |
+
+### Contributors
+
+| Guide | Description |
+|-------|-------------|
+| [Architecture](docs/architecture.md) | Component design, data flow, extension points |
+| [STRUCTURE.md](STRUCTURE.md) | Annotated file/folder map of the whole repo |
 
 ---
 
@@ -316,7 +345,7 @@ The Foundry integration is a separate post-processing layer — the core eval fl
 ## Running Tests
 
 ```bash
-# All unit tests (149 tests)
+# All unit tests (167 tests; 3 live-integration tests are skipped without Azure credentials)
 pytest tests/ -v
 
 # Skip live integration tests
@@ -337,6 +366,16 @@ pytest tests/foundry/test_integration.py -v -m integration
 2. Install dev dependencies: `pip install -e ".[dev]"`
 3. Run tests: `pytest`
 4. Open a PR with a clear description
+
+### Reporting issues and feedback
+
+We welcome bug reports, feature requests, documentation fixes, and general feedback:
+
+- 🐛 **Bug?** [Open a bug report](https://github.com/microsoft-foundry/Model-Router-Auto-Evaluation/issues/new?template=bug_report.yml)
+- ✨ **Feature idea?** [Open a feature request](https://github.com/microsoft-foundry/Model-Router-Auto-Evaluation/issues/new?template=feature_request.yml)
+- 📚 **Docs unclear?** [File a documentation issue](https://github.com/microsoft-foundry/Model-Router-Auto-Evaluation/issues/new?template=documentation.yml)
+- 💬 **General feedback or experience report?** [Share feedback](https://github.com/microsoft-foundry/Model-Router-Auto-Evaluation/issues/new?template=feedback.yml) or use [GitHub Discussions](https://github.com/microsoft-foundry/Model-Router-Auto-Evaluation/discussions) for open-ended questions.
+- 🔒 **Security vulnerability?** Please report privately via the [Microsoft Security Response Center](https://www.microsoft.com/msrc), not as a public issue.
 
 ---
 

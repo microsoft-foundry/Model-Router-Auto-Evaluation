@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or general feedback
+    url: https://aka.ms/foundry/discord
+    about: For questions about usage, sharing experience, or general feedback please use GitHub Discussions.
+  - name: Microsoft Foundry documentation
+    url: https://learn.microsoft.com/azure/ai-foundry/
+    about: For questions about the Microsoft Foundry product itself (not this evaluation tool), see the official docs.
+  - name: Security vulnerabilities
+    url: https://www.microsoft.com/msrc
+    about: Please report security vulnerabilities privately via the Microsoft Security Response Center, not as public issues.

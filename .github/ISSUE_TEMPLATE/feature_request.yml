@@ -1,0 +1,75 @@
+name: ✨ Feature request
+description: Suggest a new capability, dataset format, grader, or improvement.
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement! Please describe both the **problem** you're trying to solve and the **outcome** you'd like, so we can consider alternative solutions too.
+
+  - type: checkboxes
+    id: prereqs
+    attributes:
+      label: Pre-flight checklist
+      options:
+        - label: I have searched existing issues and discussions for similar requests.
+          required: true
+        - label: This request is about the evaluation toolkit, not about Microsoft Foundry as a product.
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the use case or pain point. Don't lead with the proposed solution.
+      placeholder: I want to evaluate Model Router on a 50,000-prompt dataset stored in BigQuery, but the current loader only supports JSONL/CSV/SQLAlchemy URLs.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would you like the toolkit to do? Be as specific as you can — CLI flags, config keys, output format, etc.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you thought about, and why they don't quite fit.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area of the toolkit
+      multiple: true
+      options:
+        - Local evaluation pipeline
+        - Foundry cloud evaluation
+        - Dataset loading / format support
+        - Judge / grader prompts
+        - Cost or latency methodology
+        - Reporting / dashboard / charts
+        - CLI / configuration
+        - Documentation / tutorials
+        - Tests / CI
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Examples, mock outputs, links to related issues or external docs.
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution
+      options:
+        - label: I would be willing to contribute a pull request for this feature.
+        - label: I'd like to discuss the design first before any implementation work.
