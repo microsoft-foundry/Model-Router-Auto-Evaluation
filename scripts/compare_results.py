@@ -31,6 +31,9 @@ def _load_results(path: Path) -> dict:
         return json.load(f)
 
 
+_MISSING = object()
+
+
 def _safe_get(data: dict, *keys, default=None):
     """Safely traverse nested dict keys."""
     current = data
@@ -40,6 +43,31 @@ def _safe_get(data: dict, *keys, default=None):
         else:
             return default
     return current
+
+
+def _quality_metric(data: dict, *keys, default=None):
+    """Read a quality metric from nested results.json layouts."""
+    value = _safe_get(data, "quality", *keys, default=_MISSING)
+    if value is not _MISSING:
+        return value
+
+    quality = data.get("quality")
+    if not isinstance(quality, dict):
+        return default
+    if len(keys) == 1:
+        return quality.get(keys[0], default)
+    if keys[0] == "pairwise" and len(keys) == 2:
+        return quality.get(keys[1], default)
+
+    legacy_map = {
+        ("absolute_scores", "router_overall"): "router_mean_score",
+        ("absolute_scores", "baseline_overall"): "baseline_mean_score",
+    }
+    legacy_key = legacy_map.get(keys)
+    if legacy_key:
+        return quality.get(legacy_key, default)
+
+    return default
 
 
 def _fmt_delta(a, b, unit="", lower_is_better=True):
@@ -98,10 +126,27 @@ def compare(run_a: dict, run_b: dict, label_a: str, label_b: str) -> list[dict]:
 
     # Quality
     for metric_key in ["router_win_rate", "baseline_win_rate", "tie_rate"]:
-        val_a = _safe_get(run_a, "quality", metric_key)
-        val_b = _safe_get(run_b, "quality", metric_key)
+        val_a = _quality_metric(run_a, "pairwise", metric_key)
+        val_b = _quality_metric(run_b, "pairwise", metric_key)
         better = metric_key == "router_win_rate"  # higher router wins is better
         _add("Quality", metric_key, val_a, val_b, "", lower_is_better=not better)
+
+    for metric_key in ["router_overall", "baseline_overall"]:
+        val_a = _quality_metric(run_a, "absolute_scores", metric_key)
+        val_b = _quality_metric(run_b, "absolute_scores", metric_key)
+        _add("Quality", metric_key, val_a, val_b, "", lower_is_better=False)
+
+    _cat_a = _safe_get(run_a, "quality", "win_rate_by_category")
+    cat_a = _cat_a if isinstance(_cat_a, dict) else {}
+    _cat_b = _safe_get(run_b, "quality", "win_rate_by_category")
+    cat_b = _cat_b if isinstance(_cat_b, dict) else {}
+    for category in sorted(set(cat_a) | set(cat_b)):
+        for metric_key in ["router_win_rate", "baseline_win_rate", "tie_rate"]:
+            val_a = _safe_get(cat_a.get(category, {}), metric_key)
+            val_b = _safe_get(cat_b.get(category, {}), metric_key)
+            better = metric_key == "router_win_rate"
+            _add("Quality by Category", f"{category} {metric_key}", val_a, val_b, "",
+                 lower_is_better=not better)
 
     # Requests
     for endpoint in ["model_router", "baseline"]:
@@ -178,12 +223,12 @@ def compare_cross(local: dict, foundry: dict, label_local: str, label_foundry: s
     graders = foundry.get("grader_summary", {})
 
     # Quality: map local quality scores to Foundry graders
-    local_router_score = _safe_get(local, "quality", "router_mean_score")
+    local_router_score = _quality_metric(local, "absolute_scores", "router_overall")
     foundry_router_score = _safe_get(graders, "quality_absolute_router", "mean")
     _add("Quality", "router_absolute_score", local_router_score, foundry_router_score, "",
          lower_is_better=False)
 
-    local_baseline_score = _safe_get(local, "quality", "baseline_mean_score")
+    local_baseline_score = _quality_metric(local, "absolute_scores", "baseline_overall")
     foundry_baseline_score = _safe_get(graders, "quality_absolute_baseline", "mean")
     _add("Quality", "baseline_absolute_score", local_baseline_score, foundry_baseline_score, "",
          lower_is_better=False)
