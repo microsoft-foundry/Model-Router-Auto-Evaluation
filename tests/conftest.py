@@ -2,10 +2,17 @@
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
 import pytest
 
-from src.client import CompletionResult
-from src.config import EvalConfig, EndpointConfig, PricingConfig
+project_root = Path(__file__).resolve().parents[1]
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+from src.client import CompletionResult  # noqa: E402
+from src.config import EvalConfig, EndpointConfig, PricingConfig  # noqa: E402
 
 
 @pytest.fixture
