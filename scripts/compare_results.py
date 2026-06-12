@@ -31,6 +31,9 @@ def _load_results(path: Path) -> dict:
         return json.load(f)
 
 
+_MISSING = object()
+
+
 def _safe_get(data: dict, *keys, default=None):
     """Safely traverse nested dict keys."""
     current = data
@@ -44,11 +47,13 @@ def _safe_get(data: dict, *keys, default=None):
 
 def _quality_metric(data: dict, *keys, default=None):
     """Read a quality metric from nested results.json layouts."""
-    value = _safe_get(data, "quality", *keys, default=default)
-    if value is not default:
+    value = _safe_get(data, "quality", *keys, default=_MISSING)
+    if value is not _MISSING:
         return value
 
-    quality = data.get("quality", {})
+    quality = data.get("quality")
+    if not isinstance(quality, dict):
+        return default
     if len(keys) == 1:
         return quality.get(keys[0], default)
     if keys[0] == "pairwise" and len(keys) == 2:
@@ -131,8 +136,10 @@ def compare(run_a: dict, run_b: dict, label_a: str, label_b: str) -> list[dict]:
         val_b = _quality_metric(run_b, "absolute_scores", metric_key)
         _add("Quality", metric_key, val_a, val_b, "", lower_is_better=False)
 
-    cat_a = _safe_get(run_a, "quality", "win_rate_by_category", default={}) or {}
-    cat_b = _safe_get(run_b, "quality", "win_rate_by_category", default={}) or {}
+    _cat_a = _safe_get(run_a, "quality", "win_rate_by_category")
+    cat_a = _cat_a if isinstance(_cat_a, dict) else {}
+    _cat_b = _safe_get(run_b, "quality", "win_rate_by_category")
+    cat_b = _cat_b if isinstance(_cat_b, dict) else {}
     for category in sorted(set(cat_a) | set(cat_b)):
         for metric_key in ["router_win_rate", "baseline_win_rate", "tie_rate"]:
             val_a = _safe_get(cat_a.get(category, {}), metric_key)
