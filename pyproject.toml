@@ -47,6 +47,7 @@ target-version = "py39"
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+pythonpath = ["."]
 markers = [
     "integration: marks tests that call real Azure APIs (deselect with '-m \"not integration\"')",
     "live: marks tests requiring live Foundry endpoint (deselect with '-m \"not live\"')",
