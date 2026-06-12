@@ -139,7 +139,7 @@ copy .env.example .env     # Windows
 ```
 Open `.env` and set the four endpoint URLs and API keys (router, baseline, judge, optional Foundry project). The file is in `.gitignore`, so your secrets won't be committed.
 
-> **Note:** The value you set for `AZURE_BASELINE_DEPLOYMENT` must match a key in the `pricing` section of your config file. If you use a custom deployment name such as `gpt-4o-baseline`, add a matching entry under `pricing:` in `configs/default.yaml` with the same input/output rates. Otherwise baseline costs will show as $0.00 and the cost comparison will be inaccurate. This applies whether you are using Quick Deploy or Custom Deploy.
+> **Note:** The value you set for `AZURE_BASELINE_DEPLOYMENT` must match a key in the `pricing` section of the config file you run (e.g. `configs/default.yaml`). If you use a custom deployment name such as `gpt-4o-baseline`, add a matching entry under `pricing:` in that same config with the same input/output rates; otherwise baseline costs will show as $0.00 and the cost comparison will be inaccurate.
 
 ### 2. Pick or edit a config
 - `configs/quick_test.yaml` — small, fast (~10 prompts) — good first run.
