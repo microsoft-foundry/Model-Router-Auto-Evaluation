@@ -51,6 +51,8 @@ def _quality_metric(data: dict, *keys, default=None):
     quality = data.get("quality", {})
     if len(keys) == 1:
         return quality.get(keys[0], default)
+    if keys[0] == "pairwise" and len(keys) == 2:
+        return quality.get(keys[1], default)
 
     legacy_map = {
         ("absolute_scores", "router_overall"): "router_mean_score",
