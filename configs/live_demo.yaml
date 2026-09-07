@@ -1,4 +1,4 @@
-# Live evaluation using the <your-foundry-resource> Foundry deployments.
+# Live evaluation using user-supplied Foundry deployments.
 # Credentials are injected into the process environment by scripts/demo.ps1.
 evaluation:
   name: "live-model-router-demo"
@@ -27,7 +27,7 @@ pricing:
   model_router:
     input: 0.50
     output: 1.50
-  <your-baseline-deployment>:
+  baseline:
     input: 2.50
     output: 15.00
   gpt-5.4:
@@ -51,7 +51,7 @@ pricing_source:
   azure_retail:
     enabled: true
     currency: "USD"
-    region: "eastus"
+    region: "${AZURE_PRICING_REGION}"
     cache_file: ".cache/azure-retail-prices.json"
     cache_ttl_hours: 24
     timeout_seconds: 20

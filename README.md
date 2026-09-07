@@ -69,6 +69,61 @@ bash scripts/demo.sh
 
 See [QUICKSTART.md](QUICKSTART.md) for the CLI quickstart details.
 
+### Run Against Deployed Models
+
+The live demo calls an existing Microsoft Foundry Model Router deployment,
+baseline deployment, and judge deployment. It consumes billable tokens.
+
+#### Prerequisites
+
+- Complete the installation steps below so `.venv` exists.
+- Install the [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli).
+- Sign in with `az login`.
+- Ensure the three deployments exist in the same Foundry resource.
+- Ensure your identity can list keys for that resource.
+
+Run the evaluation from PowerShell:
+
+```powershell
+az login
+
+.\scripts\demo.ps1 -Live `
+  -Subscription "<subscription-id>" `
+  -ResourceGroup "<resource-group>" `
+  -ResourceName "<foundry-resource-name>" `
+  -RouterDeployment "<model-router-deployment>" `
+  -BaselineDeployment "<baseline-model-deployment>" `
+  -JudgeDeployment "<judge-model-deployment>"
+```
+
+The script:
+
+1. Selects the Azure subscription.
+2. Reads the Foundry resource endpoint, access key, and region with Azure CLI.
+3. Refreshes supported model prices from the Azure Retail Prices API.
+4. Evaluates all 25 prompts in `datasets/zava_custom.jsonl`.
+5. Opens the generated `dashboard.html`.
+
+To resume an interrupted live evaluation, add `-Resume`.
+
+> The judge should ideally be a deployment distinct from both evaluated
+> endpoints to reduce self-preference bias.
+
+If the Router, baseline, and judge use different Azure resources, configure
+their endpoints and keys in `.env`, then use the standard command:
+
+```powershell
+Copy-Item .env.example .env
+# Edit .env with the three deployed endpoints, keys, deployment names,
+# and AZURE_PRICING_REGION.
+
+.\.venv\Scripts\python.exe scripts\run_eval.py `
+  --config configs\live_demo.yaml
+```
+
+See [Run a Live Evaluation](docs/how-to-run-live-eval.md) for dataset,
+configuration, security, and troubleshooting details.
+
 ### 1. Install
 
 **Prerequisites:** Python 3.9+, a Microsoft Foundry Model Router endpoint, and an Azure OpenAI baseline endpoint.
@@ -156,11 +211,13 @@ To swap the baseline or judge model, update the deployment name in `.env` or ove
 
 ```yaml
 # configs/default.yaml
-baseline:
-  deployment: gpt-5          # change to any Azure OpenAI deployment
+endpoints:
+  baseline:
+    deployment_name: gpt-5
 judge:
-  deployment: gpt-5          # model used for LLM-as-a-judge scoring
-  concurrency: 3             # parallel judge calls
+  endpoint:
+    deployment_name: gpt-5
+  max_parallel: 3
 ```
 
 See [configs/](configs/) for all presets (`quick_test`, `large_scale`, `foundry`).

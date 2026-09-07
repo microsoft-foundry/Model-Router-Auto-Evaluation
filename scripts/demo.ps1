@@ -3,13 +3,19 @@
 #   .\scripts\demo.ps1
 #   .\scripts\demo.ps1 -Live
 #   .\scripts\demo.ps1 -Live -Resume
+#   .\scripts\demo.ps1 -Live -Subscription <id> -ResourceGroup <rg> `
+#       -ResourceName <name> -RouterDeployment <router> `
+#       -BaselineDeployment <baseline> -JudgeDeployment <judge>
 
 param(
     [switch]$Live,
     [switch]$Resume,
-    [string]$Subscription = "<your-subscription-id>",
-    [string]$ResourceGroup = "<your-resource-group>",
-    [string]$ResourceName = "<your-foundry-resource>"
+    [string]$Subscription,
+    [string]$ResourceGroup,
+    [string]$ResourceName,
+    [string]$RouterDeployment,
+    [string]$BaselineDeployment,
+    [string]$JudgeDeployment
 )
 
 $ErrorActionPreference = "Stop"
@@ -46,10 +52,27 @@ if ($LASTEXITCODE -ne 0) {
 Push-Location $projectRoot
 try {
     if ($Live) {
+        $requiredParameters = @{
+            Subscription = $Subscription
+            ResourceGroup = $ResourceGroup
+            ResourceName = $ResourceName
+            RouterDeployment = $RouterDeployment
+            BaselineDeployment = $BaselineDeployment
+            JudgeDeployment = $JudgeDeployment
+        }
+        $missingParameters = @(
+            $requiredParameters.GetEnumerator() |
+                Where-Object { [string]::IsNullOrWhiteSpace([string]$_.Value) } |
+                ForEach-Object { "-$($_.Key)" }
+        )
+        if ($missingParameters.Count -gt 0) {
+            throw "Live mode requires: $($missingParameters -join ', ')."
+        }
+
         Write-Host "This calls real deployments and consumes billable tokens." -ForegroundColor Yellow
-        Write-Host "  Router:   <your-router-deployment>"
-        Write-Host "  Baseline: <your-baseline-deployment> (GPT-5.4)"
-        Write-Host "  Judge:    <your-baseline-deployment> (GPT-5.4)"
+        Write-Host "  Router:   $RouterDeployment"
+        Write-Host "  Baseline: $BaselineDeployment"
+        Write-Host "  Judge:    $JudgeDeployment"
         Write-Host ""
 
         $az = Get-Command az -ErrorAction SilentlyContinue
@@ -73,16 +96,26 @@ try {
             throw "Unable to retrieve an access key for Foundry resource '$ResourceName'."
         }
 
+        $resourceLocation = az cognitiveservices account show `
+            --resource-group $ResourceGroup `
+            --name $ResourceName `
+            --query location `
+            --output tsv
+        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($resourceLocation)) {
+            throw "Unable to determine the Azure region for Foundry resource '$ResourceName'."
+        }
+
         $endpoint = "https://$ResourceName.cognitiveservices.azure.com/"
         $env:AZURE_MODEL_ROUTER_ENDPOINT = $endpoint
         $env:AZURE_MODEL_ROUTER_KEY = $accountKey
-        $env:AZURE_MODEL_ROUTER_DEPLOYMENT = "<your-router-deployment>"
+        $env:AZURE_MODEL_ROUTER_DEPLOYMENT = $RouterDeployment
         $env:AZURE_OPENAI_ENDPOINT = $endpoint
         $env:AZURE_OPENAI_KEY = $accountKey
-        $env:AZURE_BASELINE_DEPLOYMENT = "<your-baseline-deployment>"
+        $env:AZURE_BASELINE_DEPLOYMENT = $BaselineDeployment
         $env:AZURE_JUDGE_ENDPOINT = $endpoint
         $env:AZURE_JUDGE_KEY = $accountKey
-        $env:AZURE_JUDGE_DEPLOYMENT = "<your-baseline-deployment>"
+        $env:AZURE_JUDGE_DEPLOYMENT = $JudgeDeployment
+        $env:AZURE_PRICING_REGION = $resourceLocation
 
         $evalArgs = @("scripts\run_eval.py", "--config", "configs\live_demo.yaml")
         if ($Resume) {
@@ -128,6 +161,7 @@ try {
     Remove-Item Env:\AZURE_MODEL_ROUTER_KEY -ErrorAction SilentlyContinue
     Remove-Item Env:\AZURE_OPENAI_KEY -ErrorAction SilentlyContinue
     Remove-Item Env:\AZURE_JUDGE_KEY -ErrorAction SilentlyContinue
+    Remove-Item Env:\AZURE_PRICING_REGION -ErrorAction SilentlyContinue
     Pop-Location
 }
 
