@@ -64,11 +64,9 @@ Examples:
 
     args = parser.parse_args()
 
-    # Load .env file if present
-    load_dotenv()
-
     # Add project root to path so 'src' package is importable
     project_root = Path(__file__).resolve().parent.parent
+    load_dotenv(project_root / ".env")
     sys.path.insert(0, str(project_root))
 
     from src import configure_console_encoding

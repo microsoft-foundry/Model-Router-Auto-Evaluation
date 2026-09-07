@@ -53,11 +53,19 @@ Open `.env` and fill in your real values:
 ```
 AZURE_MODEL_ROUTER_ENDPOINT=https://your-resource.services.ai.azure.com/models
 AZURE_MODEL_ROUTER_KEY=your-model-router-key
+AZURE_MODEL_ROUTER_DEPLOYMENT=model-router
 AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com
 AZURE_OPENAI_KEY=your-azure-openai-key
+AZURE_BASELINE_DEPLOYMENT=your-baseline-deployment
+AZURE_JUDGE_ENDPOINT=https://your-resource.openai.azure.com
+AZURE_JUDGE_KEY=your-azure-openai-key
+AZURE_JUDGE_DEPLOYMENT=your-judge-deployment
+AZURE_PRICING_REGION=eastus
 ```
 
-> **Security note:** `.env` is listed in `.gitignore` and will never be committed. The endpoint URLs in `.env.example` are placeholders — they don't connect to anything until you replace them.
+> **Security note:** `.env` is listed in `.gitignore`. Do not force-add or
+> commit it. The endpoint URLs in `.env.example` are placeholders and do not
+> connect to anything until you replace them.
 
 **Where do these values come from?**
 - *Azure Portal → your Foundry resource → Keys and Endpoint*
@@ -102,6 +110,9 @@ Fix any errors here before moving on — they only get more expensive once real 
 ## Step 5: Run the evaluation
 
 ```bash
+# Windows live demo using configs/live_demo.yaml and .env
+.\scripts\demo.ps1 -Live
+
 # Full eval with default config
 python scripts/run_eval.py
 
@@ -148,4 +159,3 @@ python scripts/run_eval.py --config configs/large_scale.yaml
 - [Scale to 1,000 prompts](how-to-resume-and-scale.md) — checkpointing, multi-session runs
 - [Compare two runs](how-to-compare-runs.md) — A/B test configs or models
 - [Cross-validate local vs Foundry results](../scripts/cross_validate.py): `python scripts/cross_validate.py`
-
