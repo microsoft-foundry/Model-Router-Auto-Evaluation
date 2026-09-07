@@ -1,0 +1,93 @@
+# Live evaluation using the <your-foundry-resource> Foundry deployments.
+# Credentials are injected into the process environment by scripts/demo.ps1.
+evaluation:
+  name: "live-model-router-demo"
+  dataset: "datasets/zava_custom.jsonl"
+  sample_size: null
+  random_seed: 42
+
+endpoints:
+  model_router:
+    type: "azure_openai"
+    endpoint_url: "${AZURE_MODEL_ROUTER_ENDPOINT}"
+    api_key: "${AZURE_MODEL_ROUTER_KEY}"
+    deployment_name: "${AZURE_MODEL_ROUTER_DEPLOYMENT}"
+    parameters:
+      max_tokens: 4096
+
+  baseline:
+    type: "azure_openai"
+    endpoint_url: "${AZURE_OPENAI_ENDPOINT}"
+    api_key: "${AZURE_OPENAI_KEY}"
+    deployment_name: "${AZURE_BASELINE_DEPLOYMENT}"
+    parameters:
+      max_tokens: 4096
+
+pricing:
+  model_router:
+    input: 0.50
+    output: 1.50
+  <your-baseline-deployment>:
+    input: 2.50
+    output: 15.00
+  gpt-5.4:
+    input: 2.50
+    output: 15.00
+  gpt-5-mini:
+    input: 0.25
+    output: 2.00
+  gpt-5-nano:
+    input: 0.05
+    output: 0.40
+  # Keep this estimate aligned with the current Foundry price sheet.
+  gpt-5.6-terra:
+    input: 2.00
+    output: 12.00
+  gpt-5.6-luna:
+    input: 0.20
+    output: 1.20
+
+pricing_source:
+  azure_retail:
+    enabled: true
+    currency: "USD"
+    region: "eastus"
+    cache_file: ".cache/azure-retail-prices.json"
+    cache_ttl_hours: 24
+    timeout_seconds: 20
+    models:
+      gpt-5.4:
+        search: "5.4"
+        excluded_terms: ["pro", "mini", "nano", "pp", "ShortCo", "LongCo"]
+      gpt-5-mini: "GPT 5 Mini"
+      gpt-5-nano: "GPT 5 Nano"
+      gpt-5.6-terra:
+        search: "5.6 terra"
+        required_terms: ["ShortCo", "Std"]
+      gpt-5.6-luna:
+        search: "5.6 luna"
+        required_terms: ["ShortCo", "Std"]
+
+concurrency:
+  max_parallel_requests: 2
+  request_timeout_seconds: 120
+  max_retries: 3
+
+output:
+  directory: "results"
+  formats: ["markdown", "csv", "json"]
+
+judge:
+  enabled: true
+  endpoint:
+    type: "azure_openai"
+    endpoint_url: "${AZURE_JUDGE_ENDPOINT}"
+    api_key: "${AZURE_JUDGE_KEY}"
+    deployment_name: "${AZURE_JUDGE_DEPLOYMENT}"
+    parameters:
+      max_tokens: 1024
+  pairwise_template: "configs/judge_prompts/pairwise.yaml"
+  absolute_template: "configs/judge_prompts/absolute.yaml"
+  max_parallel: 2
+  timeout_seconds: 120
+  max_retries: 3

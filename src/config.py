@@ -69,6 +69,7 @@ class EvalConfig:
 
     # Judge (quality evaluation)
     judge: Optional[JudgeConfig] = None
+    pricing_metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 def load_config(config_path: str | Path) -> EvalConfig:
@@ -136,6 +137,23 @@ def load_config(config_path: str | Path) -> EvalConfig:
             output=float(prices.get("output", 0)),
         )
 
+    retail_settings = config.get("pricing_source", {}).get("azure_retail", {})
+    pricing_metadata: Dict[str, Any] = {"type": "yaml"}
+    if retail_settings.get("enabled", False):
+        from src.retail_pricing import resolve_azure_retail_prices
+
+        project_root = config_path.resolve().parent.parent
+        pricing = resolve_azure_retail_prices(pricing, retail_settings, project_root)
+        pricing_metadata = {
+            "type": "azure_retail_with_yaml_fallback",
+            "currency": retail_settings.get("currency", "USD"),
+            "region": retail_settings.get("region"),
+            "cache_file": retail_settings.get(
+                "cache_file", ".cache/azure-retail-prices.json"
+            ),
+            "cache_ttl_hours": retail_settings.get("cache_ttl_hours", 24),
+        }
+
     eval_config = EvalConfig(
         name=eval_section.get("name", "unnamed-eval"),
         dataset=eval_section.get("dataset", "datasets/sample_custom.jsonl"),
@@ -149,6 +167,7 @@ def load_config(config_path: str | Path) -> EvalConfig:
         max_retries=concurrency.get("max_retries", 3),
         output_directory=output.get("directory", "results"),
         output_formats=output.get("formats", ["markdown", "csv"]),
+        pricing_metadata=pricing_metadata,
     )
 
     # Optional judge configuration

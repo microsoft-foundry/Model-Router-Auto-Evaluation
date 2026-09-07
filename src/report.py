@@ -108,6 +108,13 @@ def _generate_markdown(
         "## Executive Summary",
         "",
     ]
+    if rm.total_requests < 30:
+        lines += [
+            "> [!WARNING]",
+            f"> This run contains only {rm.total_requests} prompts. Treat it as a "
+            "directional smoke test, not statistically reliable evidence.",
+            "",
+        ]
 
     # Executive summary
     if comp:
@@ -274,6 +281,8 @@ def _generate_markdown(
         f"- **Sample size**: {rm.total_requests} prompts",
         f"- **Model Router endpoint**: {config.model_router.deployment_name}",
         f"- **Baseline model**: {config.baseline.deployment_name}",
+        f"- **Pricing source**: {config.pricing_metadata.get('type', 'yaml')}",
+        f"- **Pricing region**: {config.pricing_metadata.get('region') or 'not specified'}",
         f"- **Temperature**: {config.model_router.parameters.get('temperature', 'N/A')}",
         f"- **Max tokens**: {config.model_router.parameters.get('max_tokens', 'N/A')}",
         f"- **Concurrency**: {config.max_parallel_requests} parallel requests",
@@ -479,6 +488,11 @@ def _generate_json(metrics: EvalMetrics, config: EvalConfig, output_dir: Path) -
     output = {
         "evaluation_name": config.name,
         "dataset": config.dataset,
+        "pricing_source": config.pricing_metadata,
+        "pricing_used": {
+            name: {"input": value.input, "output": value.output}
+            for name, value in config.pricing.items()
+        },
         "model_router": _endpoint_dict(metrics.model_router),
         "baseline": _endpoint_dict(metrics.baseline),
     }

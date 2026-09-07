@@ -79,7 +79,19 @@ The underlying model is identified from each API response's `model` field and ma
 
 ### Pricing source
 
-All prices are in USD per 1 million tokens, configured in the YAML config under `pricing:`. The default config includes 24 models with current Azure pricing. **Update these whenever Azure pricing changes** — the tool can't fetch them automatically.
+Prices are expressed per 1 million tokens. When
+`pricing_source.azure_retail.enabled` is true, the tool queries the public
+[Azure Retail Prices API](https://learn.microsoft.com/rest/api/cost-management/retail-prices/azure-retail-prices)
+for current Foundry Models consumption meters and caches resolved prices for
+24 hours by default.
+
+The resolver accepts only unambiguous global-standard, non-batch,
+non-cached, non-priority input/output token meters. Values under `pricing:`
+remain explicit fallbacks when the API is unavailable, a meter cannot be
+resolved safely, or a Marketplace model does not expose a compatible meter.
+Set `pricing_source.azure_retail.region` to the Foundry resource's ARM region
+when regional records differ. The Model Router markup remains explicitly
+configured.
 
 ## Latency measurement
 
@@ -148,8 +160,8 @@ These are computed using Python-based graders that operate on the same cost and 
 |--------|---------------|----------------|
 | Quality absolute | score ≥ 3 | Response is adequate or better |
 | Quality pairwise | score ≥ 3 | Router is at least as good as baseline |
-| Cost comparison | ratio ≥ 0.5 | Router saves ≥ 50% of baseline cost |
-| Latency comparison | ratio ≥ 0.5 | Router is ≥ 50% faster than baseline |
+| Cost comparison | score ≥ 0.5 | Router costs no more than the baseline |
+| Latency comparison | score ≥ 0.5 | Router is no slower than the baseline |
 
 ### Interpreting cross-validation
 

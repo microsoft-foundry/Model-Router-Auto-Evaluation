@@ -51,6 +51,7 @@ def _result_to_dict(r: CompletionResult) -> dict:
         "status": r.status,
         "error_message": r.error_message,
         "timestamp": r.timestamp,
+        "estimated_cost_usd": r.estimated_cost_usd,
     }
 
 
@@ -69,6 +70,7 @@ def _dict_to_result(d: dict) -> CompletionResult:
         status=d["status"],
         error_message=d.get("error_message"),
         timestamp=d["timestamp"],
+        estimated_cost_usd=d.get("estimated_cost_usd"),
     )
 
 
@@ -292,6 +294,11 @@ async def run_evaluation(config: EvalConfig, *, resume: bool = False) -> EvalMet
         random_seed=config.random_seed,
     )
     print(f"Loaded {len(prompts)} prompts")
+    if len(prompts) < 30:
+        print(
+            "Warning: fewer than 30 prompts were loaded. "
+            "Treat this run as a directional smoke test, not statistical evidence."
+        )
 
     # Build category map for per-category analysis
     category_map: Dict[str, str] = {}

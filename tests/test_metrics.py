@@ -63,6 +63,23 @@ class TestCostStats:
         stats = _compute_cost_stats([], pricing)
         assert stats is None
 
+    def test_includes_billable_tokens_from_error_results(self):
+        results = [
+            make_completion_result(
+                prompt_id="p1",
+                prompt_tokens=100,
+                completion_tokens=200,
+                status="error",
+            ),
+        ]
+        pricing = PricingConfig(input=2.50, output=10.00)
+
+        stats = _compute_cost_stats(results, pricing)
+
+        assert stats is not None
+        assert stats.total_tokens == 300
+        assert stats.estimated_cost_usd > 0
+
 
 class TestComputeMetrics:
     def test_full_comparison(self):

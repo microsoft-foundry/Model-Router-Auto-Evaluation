@@ -1,5 +1,6 @@
 """Tests for judge parsing, dual-ordering resolution, and quality metrics."""
 
+import pytest
 
 from src.judge import (
     AbsoluteScore,
@@ -36,9 +37,9 @@ class TestParsePairwiseVerdict:
         v = _parse_pairwise_verdict("verdict: a_better")
         assert v.winner == "A"
 
-    def test_no_verdict_defaults_tie(self):
-        v = _parse_pairwise_verdict("I think A is better but I'm not sure.")
-        assert v.winner == "TIE"
+    def test_no_verdict_raises(self):
+        with pytest.raises(ValueError, match="valid VERDICT"):
+            _parse_pairwise_verdict("I think A is better but I'm not sure.")
 
     def test_raw_output_preserved(self):
         text = "Some analysis\nVERDICT: B_BETTER"

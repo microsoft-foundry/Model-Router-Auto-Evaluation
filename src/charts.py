@@ -385,7 +385,7 @@ def _chart_model_distribution(
     total = sum(sizes)
 
     # Color palette for distinct models
-    cmap = plt.cm.get_cmap("Set2", max(len(labels), 3))
+    cmap = matplotlib.colormaps.get_cmap("Set2").resampled(max(len(labels), 3))
     colors = [cmap(i) for i in range(len(labels))]
 
     fig, ax = plt.subplots(figsize=(CHART_WIDTH, CHART_HEIGHT_SINGLE), dpi=CHART_DPI)

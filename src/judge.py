@@ -99,11 +99,10 @@ _SCORES_PATTERN = re.compile(
 def _parse_pairwise_verdict(text: str) -> PairwiseVerdict:
     """Parse a pairwise judge response into a verdict."""
     match = _VERDICT_PATTERN.search(text)
-    if match:
-        raw = match.group(1).upper()
-        winner = {"A_BETTER": "A", "B_BETTER": "B", "TIE": "TIE"}[raw]
-    else:
-        winner = "TIE"  # Default to tie on parse failure
+    if not match:
+        raise ValueError("Judge response did not contain a valid VERDICT line")
+    raw = match.group(1).upper()
+    winner = {"A_BETTER": "A", "B_BETTER": "B", "TIE": "TIE"}[raw]
     return PairwiseVerdict(winner=winner, raw_output=text)
 
 

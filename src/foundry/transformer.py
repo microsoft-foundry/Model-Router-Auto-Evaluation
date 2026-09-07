@@ -65,6 +65,10 @@ def _estimate_cost(
     pricing: Dict[str, float],
 ) -> float:
     """Estimate USD cost for a single completion record."""
+    exact_cost = record.get("estimated_cost_usd")
+    if exact_cost is not None:
+        return float(exact_cost)
+
     prompt_tokens = record.get("prompt_tokens", 0)
     completion_tokens = record.get("completion_tokens", 0)
     return (

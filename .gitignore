@@ -55,6 +55,7 @@ htmlcov/
 coverage.xml
 *.cover
 .hypothesis/
+.cache/
 
 # Logs
 *.log

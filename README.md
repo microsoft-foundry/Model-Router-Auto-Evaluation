@@ -145,6 +145,9 @@ cp .env.example .env
 
 Edit `configs/default.yaml` to set endpoints, baseline model, pricing, and judge settings.
 
+- **Azure retail pricing refresh** — supported Foundry model token prices are
+  refreshed from the public Azure Retail Prices API and cached for 24 hours;
+  YAML prices remain fallbacks
 - **24 models pre-configured** — Azure OpenAI, Anthropic, xAI, DeepSeek, Meta
 - **LLM-as-a-judge** enabled by default; configure via `AZURE_JUDGE_*` env vars or `judge.endpoint` in YAML
 - **Environment variables** (`${VAR}`) are resolved from `.env` at load time

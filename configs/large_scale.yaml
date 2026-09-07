@@ -63,6 +63,37 @@ pricing:                     # USD per 1M tokens
   # ── Meta ──
   Llama-4-Maverick-17B-128E-Instruct-FP8: { input: 0.20, output: 0.20 }
 
+pricing_source:
+  azure_retail:
+    enabled: true
+    currency: "USD"
+    region: null
+    cache_file: ".cache/azure-retail-prices.json"
+    cache_ttl_hours: 24
+    timeout_seconds: 20
+    models:
+      gpt-4.1:
+        search: "GPT 4.1"
+        excluded_terms: ["mini", "nano"]
+      gpt-4.1-mini: "GPT 4.1 Mini"
+      gpt-4.1-nano: "GPT 4.1 Nano"
+      gpt-4o:
+        search: "GPT-4o"
+        excluded_terms: ["mini"]
+      gpt-4o-mini: "GPT-4o mini"
+      o4-mini: "o4-mini"
+      gpt-5:
+        search: "GPT 5"
+        excluded_terms:
+          [".1", ".2", ".4", ".5", ".6", "mini", "nano", "chat", "codex", "pro"]
+      gpt-5-mini: "GPT 5 Mini"
+      gpt-5-nano: "GPT 5 Nano"
+      gpt-5-chat: "GPT 5 chat"
+      gpt-5.2:
+        search: "GPT 5.2"
+        excluded_terms: ["pro", "chat", "ShortCo", "LongCo"]
+      gpt-5.2-chat: "GPT 5.2 chat"
+
 concurrency:
   max_parallel_requests: 10      # Higher than default (5) for throughput
   request_timeout_seconds: 120   # Longer timeout for complex prompts

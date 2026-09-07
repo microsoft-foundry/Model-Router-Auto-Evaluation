@@ -28,6 +28,7 @@ class CompletionResult:
     status: str               # "success" | "error" | "timeout"
     error_message: Optional[str]
     timestamp: str            # ISO 8601
+    estimated_cost_usd: Optional[float] = None            # ISO 8601
 
 
 def _build_client(endpoint_config: EndpointConfig) -> AsyncAzureOpenAI | AsyncOpenAI:
@@ -153,6 +154,24 @@ class EvalClient:
                 prompt_tokens = usage.prompt_tokens if usage else 0
                 completion_tokens = usage.completion_tokens if usage else 0
                 total_tokens = usage.total_tokens if usage else 0
+                if not response_text.strip():
+                    return CompletionResult(
+                        request_id=request_id,
+                        prompt_id=prompt_id,
+                        endpoint=endpoint_label,
+                        model_name=model_name,
+                        response_text="",
+                        prompt_tokens=prompt_tokens,
+                        completion_tokens=completion_tokens,
+                        total_tokens=total_tokens,
+                        latency_ms=round(elapsed_ms, 2),
+                        status="error",
+                        error_message=(
+                            "Model returned no visible response content. "
+                            "Increase max_tokens if the completion budget was exhausted."
+                        ),
+                        timestamp=timestamp,
+                    )
 
                 return CompletionResult(
                     request_id=request_id,

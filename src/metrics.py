@@ -164,18 +164,22 @@ def _compute_cost_stats(
         all_pricing: All pricing configs keyed by model name (for model router).
         router_markup_pricing: Model router markup pricing (input-only charge).
     """
-    successful = [r for r in results if r.status == "success"]
-    if not successful:
+    billable = [
+        r for r in results
+        if r.prompt_tokens > 0 or r.completion_tokens > 0 or r.total_tokens > 0
+    ]
+    if not billable:
         return None
 
-    total_prompt_tokens = sum(r.prompt_tokens for r in successful)
-    total_completion_tokens = sum(r.completion_tokens for r in successful)
+    total_prompt_tokens = sum(r.prompt_tokens for r in billable)
+    total_completion_tokens = sum(r.completion_tokens for r in billable)
     total_tokens = total_prompt_tokens + total_completion_tokens
 
     # Per-prompt costs
     per_prompt_costs = []
-    for r in successful:
+    for r in billable:
         cost = _compute_single_result_cost(r, pricing, all_pricing, router_markup_pricing)
+        r.estimated_cost_usd = cost
         per_prompt_costs.append(cost)
 
     estimated_cost = sum(per_prompt_costs)
@@ -474,7 +478,7 @@ def compute_quality_metrics(
     b_efficiency = round(b_overall_mean / (baseline_mean_latency_ms / 1000), 2) if baseline_mean_latency_ms > 0 else None
 
     # Bootstrap CI for router win rate
-    ci = _bootstrap_ci(router_wins, total) if total > 0 else None
+    ci = _bootstrap_ci(router_wins, total) if total >= 20 else None
 
     return QualityMetrics(
         router_win_rate=round(router_wr, 4),

@@ -259,6 +259,16 @@ def generate_dashboard(
     color: var(--gray-400);
   }}
 
+  .sample-warning {{
+    margin: 16px 0;
+    padding: 12px 16px;
+    border: 1px solid #f0ad4e;
+    border-radius: 8px;
+    background: #fff8e5;
+    color: #7a4b00;
+    font-weight: 600;
+  }}
+
   @media (max-width: 640px) {{
     .kpi-row {{ grid-template-columns: repeat(2, 1fr); }}
     .charts-grid {{ grid-template-columns: 1fr; }}
@@ -273,6 +283,8 @@ def generate_dashboard(
     <h1>Model Router Evaluation Dashboard</h1>
     <div class="subtitle">{_esc(eval_name)} &mdash; {rm.total_requests} prompts &mdash; Model Router vs {_esc(baseline_label)}</div>
   </div>
+
+  {f'<div class="sample-warning">Smoke test: only {rm.total_requests} prompts were evaluated. Do not treat this run as statistically reliable evidence.</div>' if rm.total_requests < 30 else ''}
 
   <!-- KPI Cards -->
   <div class="kpi-row">

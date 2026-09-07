@@ -45,6 +45,31 @@ class TestTransform:
         assert rec["router_cost_usd"] >= 0.0
         assert rec["baseline_cost_usd"] >= 0.0
 
+    def test_exact_per_request_cost_takes_precedence(
+        self, tmp_path, sample_raw_results, sample_results_json
+    ):
+        records = []
+        with open(sample_raw_results) as f:
+            for line in f:
+                record = json.loads(line)
+                record["estimated_cost_usd"] = (
+                    0.000123 if record["endpoint"] == "model_router" else 0.000456
+                )
+                records.append(record)
+
+        with open(sample_raw_results, "w") as f:
+            for record in records:
+                f.write(json.dumps(record) + "\n")
+
+        output = tmp_path / "output" / "foundry_input.jsonl"
+        transform(sample_raw_results, sample_results_json, output)
+
+        with open(output) as f:
+            rec = json.loads(f.readline())
+
+        assert rec["router_cost_usd"] == 0.000123
+        assert rec["baseline_cost_usd"] == 0.000456
+
     def test_no_matching_pairs(self, tmp_path, sample_results_json):
         # Create raw results with only router records (no baseline)
         raw = tmp_path / "raw_router_only.jsonl"
