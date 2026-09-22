@@ -1,35 +1,50 @@
-"""Quick test: try baseline gpt-5 call using model router endpoint."""
+"""Quick test: try the configured Foundry v1 endpoints."""
 import os
 from dotenv import load_dotenv
 load_dotenv()
-from openai import AzureOpenAI
+from openai import OpenAI
 
-# Test 1: using AZURE_OPENAI_ENDPOINT (services.ai.azure.com)
-print("=== Test 1: services.ai.azure.com endpoint ===")
+print("=== Test 1: baseline Responses API ===")
 try:
-    client = AzureOpenAI(
-        azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+    client = OpenAI(
+        base_url=os.environ["AZURE_OPENAI_ENDPOINT"],
         api_key=os.environ["AZURE_OPENAI_KEY"],
-        api_version="2024-12-01-preview",
     )
-    r = client.chat.completions.create(
-        model="gpt-5", messages=[{"role": "user", "content": "Say hi"}], max_completion_tokens=10
+    r = client.responses.create(
+        model=os.environ["AZURE_BASELINE_DEPLOYMENT"],
+        input="Say hi",
+        max_output_tokens=32,
     )
-    print("SUCCESS:", r.choices[0].message.content)
+    print("SUCCESS:", r.output_text)
 except Exception as e:
     print("ERROR:", e)
 
-# Test 2: using AZURE_MODEL_ROUTER_ENDPOINT (openai.azure.com)
-print("\n=== Test 2: openai.azure.com endpoint ===")
+print("\n=== Test 2: Model Router Chat Completions API ===")
 try:
-    client2 = AzureOpenAI(
-        azure_endpoint=os.environ["AZURE_MODEL_ROUTER_ENDPOINT"],
+    client2 = OpenAI(
+        base_url=os.environ["AZURE_MODEL_ROUTER_ENDPOINT"],
         api_key=os.environ["AZURE_MODEL_ROUTER_KEY"],
-        api_version="2024-12-01-preview",
     )
     r2 = client2.chat.completions.create(
-        model="gpt-5", messages=[{"role": "user", "content": "Say hi"}], max_completion_tokens=10
+        model=os.environ["AZURE_MODEL_ROUTER_DEPLOYMENT"],
+        messages=[{"role": "user", "content": "Say hi"}],
+        max_completion_tokens=32,
     )
     print("SUCCESS:", r2.choices[0].message.content)
+except Exception as e:
+    print("ERROR:", e)
+
+print("\n=== Test 3: judge Responses API ===")
+try:
+    client3 = OpenAI(
+        base_url=os.environ["AZURE_JUDGE_ENDPOINT"],
+        api_key=os.environ["AZURE_JUDGE_KEY"],
+    )
+    r3 = client3.responses.create(
+        model=os.environ["AZURE_JUDGE_DEPLOYMENT"],
+        input="Reply with OK",
+        max_output_tokens=32,
+    )
+    print("SUCCESS:", r3.output_text)
 except Exception as e:
     print("ERROR:", e)

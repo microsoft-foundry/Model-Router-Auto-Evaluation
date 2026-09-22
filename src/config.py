@@ -17,6 +17,7 @@ class EndpointConfig:
     endpoint_url: str
     api_key: str
     deployment_name: str
+    api_mode: str = "chat_completions"
     parameters: Dict[str, Any] = field(default_factory=lambda: {
         "temperature": 0.7,
         "max_tokens": 1024,
@@ -120,12 +121,34 @@ def load_config(config_path: str | Path) -> EvalConfig:
                 raise ValueError(f"Endpoint '{ep_name}' missing required field: '{field_name}'")
 
     # Build endpoint configs
-    def _build_endpoint(data: dict) -> EndpointConfig:
+    def _build_endpoint(data: dict, endpoint_name: str) -> EndpointConfig:
+        api_mode = data.get("api_mode", "chat_completions")
+        if api_mode not in {"chat_completions", "responses"}:
+            raise ValueError(
+                f"Unknown endpoint api_mode: '{api_mode}'. "
+                "Supported: 'chat_completions', 'responses'"
+            )
+        endpoint_url = data["endpoint_url"].rstrip("/")
+        operation_suffix = next(
+            (
+                suffix
+                for suffix in ("/chat/completions", "/responses")
+                if endpoint_url.endswith(suffix)
+            ),
+            None,
+        )
+        if operation_suffix:
+            base_url = endpoint_url.removesuffix(operation_suffix)
+            raise ValueError(
+                f"Endpoint '{endpoint_name}' must use a base URL, not an operation URL. "
+                f"Set endpoint_url to '{base_url}'."
+            )
         return EndpointConfig(
             type=data["type"],
-            endpoint_url=data["endpoint_url"],
+            endpoint_url=endpoint_url,
             api_key=data["api_key"],
             deployment_name=data["deployment_name"],
+            api_mode=api_mode,
             parameters=data.get("parameters", {"temperature": 0.7, "max_tokens": 1024}),
         )
 
@@ -159,8 +182,8 @@ def load_config(config_path: str | Path) -> EvalConfig:
         dataset=eval_section.get("dataset", "datasets/sample_custom.jsonl"),
         sample_size=eval_section.get("sample_size"),
         random_seed=eval_section.get("random_seed", 42),
-        model_router=_build_endpoint(endpoints["model_router"]),
-        baseline=_build_endpoint(endpoints["baseline"]),
+        model_router=_build_endpoint(endpoints["model_router"], "model_router"),
+        baseline=_build_endpoint(endpoints["baseline"], "baseline"),
         pricing=pricing,
         max_parallel_requests=concurrency.get("max_parallel_requests", 5),
         request_timeout_seconds=concurrency.get("request_timeout_seconds", 60),
@@ -180,13 +203,7 @@ def load_config(config_path: str | Path) -> EvalConfig:
 
         eval_config.judge = JudgeConfig(
             enabled=True,
-            endpoint=EndpointConfig(
-                type=judge_ep["type"],
-                endpoint_url=judge_ep["endpoint_url"],
-                api_key=judge_ep["api_key"],
-                deployment_name=judge_ep["deployment_name"],
-                parameters=judge_ep.get("parameters", {}),
-            ),
+            endpoint=_build_endpoint(judge_ep, "judge"),
             pairwise_template=judge_section.get(
                 "pairwise_template", "configs/judge_prompts/pairwise.yaml"
             ),

@@ -10,7 +10,8 @@ evaluation:
 
 endpoints:
   model_router:
-    type: "azure_openai"
+    type: "openai_compatible"
+    api_mode: "chat_completions"
     endpoint_url: "${AZURE_MODEL_ROUTER_ENDPOINT}"
     api_key: "${AZURE_MODEL_ROUTER_KEY}"
     deployment_name: "${AZURE_MODEL_ROUTER_DEPLOYMENT}"
@@ -18,7 +19,8 @@ endpoints:
       max_tokens: 1024
 
   baseline:
-    type: "azure_openai"
+    type: "openai_compatible"
+    api_mode: "responses"
     endpoint_url: "${AZURE_OPENAI_ENDPOINT}"
     api_key: "${AZURE_OPENAI_KEY}"
     deployment_name: "${AZURE_BASELINE_DEPLOYMENT}"
@@ -106,7 +108,8 @@ output:
 judge:
   enabled: true
   endpoint:
-    type: "azure_openai"
+    type: "openai_compatible"
+    api_mode: "responses"
     endpoint_url: "${AZURE_JUDGE_ENDPOINT}"
     api_key: "${AZURE_JUDGE_KEY}"
     deployment_name: "${AZURE_JUDGE_DEPLOYMENT}"

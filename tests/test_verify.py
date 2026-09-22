@@ -154,6 +154,21 @@ class TestVerifyLocalEval:
         assert vr.passed is False
         assert any("no requests" in msg for _, msg in vr.checks)
 
+    def test_null_metrics_fail_without_crashing(self, tmp_path):
+        data = _make_local_results()
+        data["model_router"]["cost"] = None
+        data["model_router"]["latency"] = None
+        _write_json(tmp_path / "results.json", data)
+        _write_text(tmp_path / "report.md", "# Report")
+        _write_text(tmp_path / "dashboard.html", "<html></html>")
+        _write_text(tmp_path / "raw_results.jsonl", '{"a":1}\n')
+
+        vr = verify_local_eval(tmp_path)
+
+        failures = [msg for ok, msg in vr.checks if not ok]
+        assert "model_router: cost data missing" in failures
+        assert "model_router: latency data missing" in failures
+
     def test_some_errors_below_threshold(self, tmp_path):
         data = _make_local_results()
         data["baseline"]["error_count"] = 1

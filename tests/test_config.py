@@ -124,3 +124,36 @@ class TestLoadConfig:
         self._write_config(path, config_dict)
         config = load_config(path)
         assert config.name == "unnamed-eval"
+        assert config.model_router.api_mode == "chat_completions"
+
+    def test_responses_api_mode(self, tmp_path):
+        path = tmp_path / "config.yaml"
+        config_dict = self._minimal_config()
+        config_dict["endpoints"]["baseline"]["api_mode"] = "responses"
+        self._write_config(path, config_dict)
+
+        config = load_config(path)
+
+        assert config.baseline.api_mode == "responses"
+
+    def test_invalid_api_mode_raises(self, tmp_path):
+        path = tmp_path / "config.yaml"
+        config_dict = self._minimal_config()
+        config_dict["endpoints"]["baseline"]["api_mode"] = "completions"
+        self._write_config(path, config_dict)
+
+        with pytest.raises(ValueError, match="Unknown endpoint api_mode"):
+            load_config(path)
+
+    def test_operation_url_raises_with_base_url(self, tmp_path):
+        path = tmp_path / "config.yaml"
+        config_dict = self._minimal_config()
+        config_dict["endpoints"]["model_router"]["endpoint_url"] = (
+            "https://test.services.ai.azure.com/openai/v1/chat/completions"
+        )
+        self._write_config(path, config_dict)
+
+        with pytest.raises(ValueError, match="must use a base URL") as exc_info:
+            load_config(path)
+
+        assert "https://test.services.ai.azure.com/openai/v1" in str(exc_info.value)

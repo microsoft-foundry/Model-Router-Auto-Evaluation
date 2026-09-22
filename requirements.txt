@@ -6,7 +6,7 @@
 # in pyproject.toml: `pip install -e .` (core), `.[foundry]`, `.[dev]`, `.[db]`.
 
 # --- Core (required by scripts/run_eval.py and src/) ---
-openai>=1.0
+openai>=2.0
 pyyaml>=6.0
 matplotlib>=3.7
 numpy>=1.24
