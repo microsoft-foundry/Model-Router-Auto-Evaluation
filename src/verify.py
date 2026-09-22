@@ -98,7 +98,7 @@ def verify_local_eval(output_dir: str | Path) -> VerifyResult:
 
     # 4. Cost data present
     for endpoint in ("model_router", "baseline"):
-        cost = data.get(endpoint, {}).get("cost", {})
+        cost = data.get(endpoint, {}).get("cost") or {}
         if cost.get("estimated_cost_usd") is not None:
             result.ok(f"{endpoint}: cost data present (${cost['estimated_cost_usd']:.4f})")
         else:
@@ -106,7 +106,7 @@ def verify_local_eval(output_dir: str | Path) -> VerifyResult:
 
     # 5. Latency data present
     for endpoint in ("model_router", "baseline"):
-        latency = data.get(endpoint, {}).get("latency", {})
+        latency = data.get(endpoint, {}).get("latency") or {}
         if latency.get("mean_ms") is not None:
             result.ok(f"{endpoint}: latency data present (mean {latency['mean_ms']:.0f}ms)")
         else:

@@ -8,9 +8,10 @@ import uuid
 from dataclasses import dataclass
 from typing import Optional
 
-from openai import AsyncAzureOpenAI, AsyncOpenAI, APIError, APITimeoutError
+from openai import APIError, APITimeoutError
 
 from .config import EndpointConfig
+from .model_api import ModelClient, build_model_client, request_model
 
 
 @dataclass
@@ -31,26 +32,6 @@ class CompletionResult:
     estimated_cost_usd: Optional[float] = None            # ISO 8601
 
 
-def _build_client(endpoint_config: EndpointConfig) -> AsyncAzureOpenAI | AsyncOpenAI:
-    """Build an async OpenAI client from endpoint configuration."""
-    if endpoint_config.type == "azure_openai":
-        return AsyncAzureOpenAI(
-            azure_endpoint=endpoint_config.endpoint_url,
-            api_key=endpoint_config.api_key,
-            api_version="2024-12-01-preview",
-        )
-    elif endpoint_config.type == "openai_compatible":
-        return AsyncOpenAI(
-            base_url=endpoint_config.endpoint_url,
-            api_key=endpoint_config.api_key,
-        )
-    else:
-        raise ValueError(
-            f"Unknown endpoint type: '{endpoint_config.type}'. "
-            f"Supported: 'azure_openai', 'openai_compatible'"
-        )
-
-
 class EvalClient:
     """Async client that calls endpoints and captures latency + token usage."""
 
@@ -64,8 +45,8 @@ class EvalClient:
     ):
         self._router_config = model_router_config
         self._baseline_config = baseline_config
-        self._router_client = _build_client(model_router_config)
-        self._baseline_client = _build_client(baseline_config)
+        self._router_client = build_model_client(model_router_config)
+        self._baseline_client = build_model_client(baseline_config)
         self._semaphore = asyncio.Semaphore(max_parallel)
         self._timeout = timeout_seconds
         self._max_retries = max_retries
@@ -113,7 +94,7 @@ class EvalClient:
 
     async def _call_with_retry(
         self,
-        client: AsyncAzureOpenAI | AsyncOpenAI,
+        client: ModelClient,
         config: EndpointConfig,
         prompt_id: str,
         prompt_text: str,
@@ -127,43 +108,22 @@ class EvalClient:
         for attempt in range(self._max_retries):
             try:
                 start_time = time.perf_counter()
-                max_tok = config.parameters.get("max_tokens", 1024)
-                # Build create kwargs; some models (e.g. gpt-5) only accept
-                # default temperature=1, so we only include it when set and
-                # non-default to maximize compatibility.
-                create_kwargs: dict = {
-                    "model": config.deployment_name,
-                    "messages": [{"role": "user", "content": prompt_text}],
-                    "max_completion_tokens": max_tok,
-                }
-                temp = config.parameters.get("temperature")
-                if temp is not None:
-                    create_kwargs["temperature"] = temp
-                response = await asyncio.wait_for(
-                    client.chat.completions.create(**create_kwargs),
+                reply = await asyncio.wait_for(
+                    request_model(client, config, prompt_text),
                     timeout=self._timeout,
                 )
                 elapsed_ms = (time.perf_counter() - start_time) * 1000
 
-                # Extract response data
-                choice = response.choices[0] if response.choices else None
-                response_text = choice.message.content or "" if choice else ""
-                model_name = response.model or config.deployment_name
-
-                usage = response.usage
-                prompt_tokens = usage.prompt_tokens if usage else 0
-                completion_tokens = usage.completion_tokens if usage else 0
-                total_tokens = usage.total_tokens if usage else 0
-                if not response_text.strip():
+                if not reply.text.strip():
                     return CompletionResult(
                         request_id=request_id,
                         prompt_id=prompt_id,
                         endpoint=endpoint_label,
-                        model_name=model_name,
+                        model_name=reply.model,
                         response_text="",
-                        prompt_tokens=prompt_tokens,
-                        completion_tokens=completion_tokens,
-                        total_tokens=total_tokens,
+                        prompt_tokens=reply.prompt_tokens,
+                        completion_tokens=reply.completion_tokens,
+                        total_tokens=reply.total_tokens,
                         latency_ms=round(elapsed_ms, 2),
                         status="error",
                         error_message=(
@@ -177,11 +137,11 @@ class EvalClient:
                     request_id=request_id,
                     prompt_id=prompt_id,
                     endpoint=endpoint_label,
-                    model_name=model_name,
-                    response_text=response_text,
-                    prompt_tokens=prompt_tokens,
-                    completion_tokens=completion_tokens,
-                    total_tokens=total_tokens,
+                    model_name=reply.model,
+                    response_text=reply.text,
+                    prompt_tokens=reply.prompt_tokens,
+                    completion_tokens=reply.completion_tokens,
+                    total_tokens=reply.total_tokens,
                     latency_ms=round(elapsed_ms, 2),
                     status="success",
                     error_message=None,

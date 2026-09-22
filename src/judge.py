@@ -12,12 +12,12 @@ import re
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Optional
 
 import yaml
-from openai import AsyncAzureOpenAI, AsyncOpenAI
 
 from .config import EndpointConfig
+from .model_api import build_model_client, request_model
 
 
 # ── Data classes ─────────────────────────────────────────────────────────────
@@ -156,25 +156,6 @@ def _resolve_dual_ordering(
     return "tie"
 
 
-# ── Judge client ─────────────────────────────────────────────────────────────
-
-def _build_judge_client(config: EndpointConfig) -> AsyncAzureOpenAI | AsyncOpenAI:
-    """Build an async client for the judge model."""
-    if config.type == "azure_openai":
-        return AsyncAzureOpenAI(
-            azure_endpoint=config.endpoint_url,
-            api_key=config.api_key,
-            api_version="2024-12-01-preview",
-        )
-    elif config.type == "openai_compatible":
-        return AsyncOpenAI(
-            base_url=config.endpoint_url,
-            api_key=config.api_key,
-        )
-    else:
-        raise ValueError(f"Unknown judge endpoint type: '{config.type}'")
-
-
 class Judge:
     """LLM-as-a-judge evaluator with pairwise + absolute scoring."""
 
@@ -188,7 +169,7 @@ class Judge:
         max_retries: int = 2,
     ):
         self._config = judge_config
-        self._client = _build_judge_client(judge_config)
+        self._client = build_model_client(judge_config)
         self._pairwise_tpl = pairwise_template
         self._absolute_tpl = absolute_template
         self._semaphore = asyncio.Semaphore(max_parallel)
@@ -279,24 +260,17 @@ class Judge:
             last_error = None
             for attempt in range(self._max_retries):
                 try:
-                    create_kwargs: Dict[str, Any] = {
-                        "model": self._config.deployment_name,
-                        "messages": [
-                            {"role": "system", "content": system_msg},
-                            {"role": "user", "content": user_msg},
-                        ],
-                        "max_completion_tokens": 1024,
-                    }
-                    # Only pass temperature if the config explicitly sets it
-                    params = self._config.parameters or {}
-                    if "temperature" in params:
-                        create_kwargs["temperature"] = params["temperature"]
-                    response = await asyncio.wait_for(
-                        self._client.chat.completions.create(**create_kwargs),
+                    reply = await asyncio.wait_for(
+                        request_model(
+                            self._client,
+                            self._config,
+                            user_msg,
+                            system_content=system_msg,
+                            max_tokens=1024,
+                        ),
                         timeout=self._timeout,
                     )
-                    choice = response.choices[0] if response.choices else None
-                    return choice.message.content or "" if choice else ""
+                    return reply.text
 
                 except Exception as e:
                     last_error = e

@@ -51,13 +51,13 @@ copy .env.example .env     # Windows
 Open `.env` and fill in your real values:
 
 ```
-AZURE_MODEL_ROUTER_ENDPOINT=https://your-resource.services.ai.azure.com/models
+AZURE_MODEL_ROUTER_ENDPOINT=https://your-resource.services.ai.azure.com/openai/v1
 AZURE_MODEL_ROUTER_KEY=your-model-router-key
 AZURE_MODEL_ROUTER_DEPLOYMENT=model-router
-AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com
+AZURE_OPENAI_ENDPOINT=https://your-resource.services.ai.azure.com/openai/v1
 AZURE_OPENAI_KEY=your-azure-openai-key
 AZURE_BASELINE_DEPLOYMENT=your-baseline-deployment
-AZURE_JUDGE_ENDPOINT=https://your-resource.openai.azure.com
+AZURE_JUDGE_ENDPOINT=https://your-resource.services.ai.azure.com/openai/v1
 AZURE_JUDGE_KEY=your-azure-openai-key
 AZURE_JUDGE_DEPLOYMENT=your-judge-deployment
 AZURE_PRICING_REGION=eastus
@@ -71,6 +71,11 @@ AZURE_PRICING_REGION=eastus
 - *Azure Portal → your Foundry resource → Keys and Endpoint*
 - *Azure Portal → your Azure OpenAI resource → Keys and Endpoint*
 
+Use the resource name exactly as shown by the portal. If the portal gives a
+target URI ending in `/chat/completions` or `/responses`, remove that final
+operation segment and keep `/openai/v1`. The live presets select the operation
+with `api_mode`.
+
 ## Step 3: Configure the evaluation (optional)
 
 The default config (`configs/default.yaml`) works out of the box. The settings most people change first:
@@ -80,6 +85,7 @@ The default config (`configs/default.yaml`) works out of the box. The settings m
 | Baseline model | `endpoints.baseline.deployment_name` | `gpt-5` | Which model the router is compared against |
 | Number of prompts | `evaluation.sample_size` | `null` (all) | How many dataset prompts to use |
 | Judge enabled | `judge.enabled` | `true` | Whether to run quality scoring (costs extra API calls) |
+| Endpoint API | `api_mode` | Per endpoint | `chat_completions` or `responses` |
 | Concurrency | `concurrency.max_parallel_requests` | `5` | How many prompts run in parallel |
 
 To change the baseline model, edit `configs/default.yaml`:

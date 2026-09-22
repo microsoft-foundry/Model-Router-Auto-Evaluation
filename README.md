@@ -164,13 +164,13 @@ cp .env.example .env
 
 | Variable | Description |
 |----------|-------------|
-| `AZURE_MODEL_ROUTER_ENDPOINT` | Model Router endpoint URL |
+| `AZURE_MODEL_ROUTER_ENDPOINT` | Foundry OpenAI v1 base URL ending in `/openai/v1` |
 | `AZURE_MODEL_ROUTER_KEY` | Model Router API key |
 | `AZURE_MODEL_ROUTER_DEPLOYMENT` | Model Router deployment name (e.g. `model-router`) |
-| `AZURE_OPENAI_ENDPOINT` | Azure OpenAI endpoint URL (baseline) |
+| `AZURE_OPENAI_ENDPOINT` | Baseline OpenAI v1 base URL ending in `/openai/v1` |
 | `AZURE_OPENAI_KEY` | Azure OpenAI API key (baseline) |
 | `AZURE_BASELINE_DEPLOYMENT` | Baseline model deployment name (e.g. `gpt-5`) |
-| `AZURE_JUDGE_ENDPOINT` | Judge model endpoint URL (can be same as baseline) |
+| `AZURE_JUDGE_ENDPOINT` | Judge OpenAI v1 base URL (can be same as baseline) |
 | `AZURE_JUDGE_KEY` | Judge model API key |
 | `AZURE_JUDGE_DEPLOYMENT` | Judge model deployment name (e.g. `gpt-5`) |
 | `AZURE_AI_PROJECT_ENDPOINT` | Microsoft Foundry project endpoint (optional, for cloud eval) |

@@ -37,8 +37,22 @@ cp .env.example .env
 
 | Endpoint | URL format |
 |----------|-----------|
-| Model Router | `https://<resource>.services.ai.azure.com/models` |
-| Azure OpenAI (baseline/judge) | `https://<resource>.openai.azure.com` |
+| Model Router | `https://<resource>.services.ai.azure.com/openai/v1` |
+| Baseline/judge | `https://<resource>.services.ai.azure.com/openai/v1` |
+
+Use `type: openai_compatible` for these Foundry v1 URLs. Set
+`api_mode: chat_completions` for Model Router and `api_mode: responses` for
+models whose portal target URI ends in `/responses`. Do not include
+`/chat/completions` or `/responses` in the environment variable itself.
+
+### `404 Resource not found`
+
+- Confirm the resource hostname and deployment name exactly match the portal.
+- Use the `/openai/v1` base URL, without an operation suffix.
+- Ensure `type` is `openai_compatible` and `api_mode` matches the portal target URI.
+
+An invalid hostname usually produces `APIConnectionError`, while a reachable
+host with the wrong route or deployment commonly produces `404`.
 
 ---
 
